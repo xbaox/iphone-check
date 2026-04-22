@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Проверка iPhone · Чек-лист</title>
+<meta name="description" content="Чек-лист проверки iPhone при покупке. Оффлайн, сохраняет прогресс." />
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.webmanifest" />
+<meta name="theme-color" content="#0a0a0b" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="iPhone Check" />
+<link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #141417;
+    --surface-2: #1c1c20;
+    --border: #27272a;
+    --border-strong: #3f3f46;
+    --text: #fafafa;
+    --text-muted: #a1a1aa;
+    --text-faint: #71717a;
+    --accent: #f59e0b;
+    --accent-soft: #f59e0b22;
+    --success: #10b981;
+    --success-soft: #10b98122;
+    --danger: #ef4444;
+    --danger-soft: #ef444422;
+    --info: #3b82f6;
+    --info-soft: #3b82f622;
+
+    /* GIGASTORE brand */
+    --brand-yellow: #facc15;
+    --brand-purple: #8b5cf6;
+
+    --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-body: 'Inter Tight', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background-image:
+      radial-gradient(ellipse 90% 40% at 50% 0%, rgba(245, 158, 11, 0.06), transparent 60%),
+      radial-gradient(ellipse 60% 30% at 10% 100%, rgba(59, 130, 246, 0.04), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: rgba(10, 10, 11, 0.75);
+    border-bottom: 1px solid var(--border);
+  }
+  .sticky-header__inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 14px 20px 12px;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .header-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-title .dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 11px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .reset-btn:hover, .reset-btn:active {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: var(--danger-soft);
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #fbbf24);
+    width: 0%;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px var(--accent-soft);
+  }
+  .progress-text {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--accent);
+    min-width: 48px;
+    text-align: right;
+    letter-spacing: 0.02em;
+  }
+
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+
+  .intro {
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(32px, 8vw, 48px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin: 0 0 10px;
+  }
+  .hero-title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 52ch;
+  }
+
+  .callout {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+  .callout--warn {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+  }
+  .callout--tools {
+    border-color: var(--border);
+  }
+  .callout__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .callout--tools .callout__label { color: var(--info); }
+  .callout__label::before {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+  }
+  .callout ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .callout li {
+    padding: 7px 0 7px 20px;
+    color: var(--text);
+    font-size: 15px;
+    position: relative;
+    border-bottom: 1px dashed var(--border);
+  }
+  .callout li:last-child { border-bottom: none; }
+  .callout li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+  }
+  .callout li strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .section {
+    margin-top: 28px;
+  }
+  .section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+  }
+  .section__title-group {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-width: 0;
+  }
+  .section__num {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+  }
+  .section__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1.1;
+  }
+  .section__count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .section__count.done {
+    color: var(--success);
+  }
+
+  .items {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .section--danger .items {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.06), rgba(239, 68, 68, 0.01));
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.12s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    min-height: 52px;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:active { background: var(--surface-2); }
+  @media (hover: hover) {
+    .item:hover { background: var(--surface-2); }
+  }
+
+  .checkbox {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 6px;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    transition: all 0.15s ease;
+    margin-top: 1px;
+  }
+  .checkbox svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .item.checked .checkbox {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .item.checked .checkbox svg {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .section--danger .item.checked .checkbox {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+
+  .item__text {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.45;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+  .item.checked .item__text {
+    color: var(--text-faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--text-faint);
+    text-decoration-thickness: 1px;
+  }
+  .item__text strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .section--danger .item__text strong {
+    color: var(--danger);
+  }
+
+  .completion {
+    margin-top: 36px;
+    padding: 28px 24px;
+    text-align: center;
+    border: 1px solid var(--success);
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.01));
+    border-radius: var(--radius);
+    display: none;
+  }
+  .completion.visible { display: block; animation: slideIn 0.4s ease; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .completion__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 6px;
+    color: var(--success);
+  }
+  .completion__sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  footer {
+    max-width: 720px;
+    margin: 56px auto 0;
+    padding: 28px 20px 28px;
+    text-align: center;
+  }
+  .brand {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 18px 24px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(250, 204, 21, 0.03), rgba(139, 92, 246, 0.03));
+  }
+  .brand__logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand__logo .giga { color: var(--brand-yellow); }
+  .brand__logo .store { color: var(--brand-purple); }
+  .brand__smile {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .brand__sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .brand__sub b {
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .socials {
+    max-width: 440px;
+    margin: 24px auto 0;
+  }
+  .socials__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .socials__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .social-link:active {
+    transform: scale(0.99);
+    background: var(--surface-2);
+  }
+  @media (hover: hover) {
+    .social-link:hover {
+      background: var(--surface-2);
+      border-color: var(--border-strong);
+    }
+  }
+  .social-link--main {
+    border-color: rgba(250, 204, 21, 0.35);
+    background: linear-gradient(90deg, rgba(250, 204, 21, 0.06), transparent 60%);
+  }
+  .social-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+  }
+  .social-icon svg { width: 20px; height: 20px; }
+  .social-icon--tg { background: #229ED9; color: white; }
+  .social-icon--yt { background: #FF0033; color: white; }
+  .social-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    text-align: left;
+  }
+  .social-text__title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .social-text__title .star {
+    font-size: 11px;
+    color: var(--brand-yellow);
+  }
+  .social-text__sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+  .social-link__arrow {
+    color: var(--text-faint);
+    flex-shrink: 0;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  .social-link:hover .social-link__arrow,
+  .social-link:active .social-link__arrow {
+    color: var(--text);
+    transform: translateX(2px);
+  }
+
+  .admin-line {
+    margin: 18px auto 0;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+  }
+  .admin-line a {
+    color: var(--brand-yellow);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .admin-line a:hover { text-decoration: underline; }
+  .admin-line__note {
+    display: block;
+    margin-top: 4px;
+    color: var(--text-faint);
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  /* Confirm dialog */
+  .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .dialog-overlay.visible { display: flex; animation: fadeIn 0.18s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .dialog {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 340px;
+    width: 100%;
+  }
+  .dialog h3 {
+    font-family: var(--font-display);
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+  .dialog p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  .dialog-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  .dialog-buttons button {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .dialog-buttons .confirm {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+  }
+  .dialog-buttons .confirm:hover { background: #dc2626; }
+  .dialog-buttons .cancel:hover { background: var(--surface-2); }
+</style>
+</head>
+<body>
+
+<header class="sticky-header">
+  <div class="sticky-header__inner">
+    <div class="header-row">
+      <div class="header-title">
+        <span class="dot"></span>
+        iPhone · Чек-лист
+      </div>
+      <button class="reset-btn" id="resetBtn" aria-label="Сбросить прогресс">Сброс</button>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">0 / 0</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <div class="eyebrow">Инспекция · перед покупкой</div>
+    <h1 class="hero-title">Проверка <em>iPhone</em></h1>
+    <p class="hero-sub">Проходи по списку сверху вниз. Прогресс сохраняется автоматически. Работает оффлайн.</p>
+  </div>
+
+  <section class="callout callout--warn">
+    <div class="callout__label">Перед началом</div>
+    <ul>
+      <li><strong>На холодную голову, не торопиться.</strong> Главное — проверить ВСЁ. Если что-то не стыкуется, продавец юлит, торопит или не даёт что-то проверить — красный флаг, уходи</li>
+      <li>Проверка займёт <strong>20–40 минут</strong> — закладывай время</li>
+      <li>Встреча в освещённом месте с доступом к Wi-Fi</li>
+      <li><strong>Деньги передаёшь только после полного сброса устройства</strong> (последний пункт)</li>
+    </ul>
+  </section>
+
+  <section class="callout callout--tools">
+    <div class="callout__label">Инструменты с собой</div>
+    <ul>
+      <li>Повербанк с MagSafe (проверка магнитов + зарядки)</li>
+      <li>Провод зарядки (Lightning / USB-C — под модель)</li>
+      <li>Своя сим-карта</li>
+      <li>Скрепка для сим-лотка</li>
+      <li>Салфетка / микрофибра</li>
+      <li>Белый и чёрный фон (можно обои на своём телефоне)</li>
+    </ul>
+  </section>
+
+  <!-- Sections injected via JS -->
+  <div id="sections"></div>
+
+  <div class="completion" id="completion">
+    <h2 class="completion__title">✓ Всё проверено</h2>
+    <p class="completion__sub">Если на каждом шаге — норм, можно передавать деньги.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="brand">
+    <div class="brand__logo">
+      <svg class="brand__smile" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="#facc15"/>
+        <ellipse cx="22" cy="26" rx="3" ry="5.5" fill="#1a1a1a"/>
+        <ellipse cx="42" cy="26" rx="3" ry="5.5" fill="#1a1a1a"/>
+      </svg>
+      <span><span class="giga">GIGA</span><span class="store">STORE</span></span>
+    </div>
+    <div class="brand__sub">by <b>Bao</b> &nbsp;·&nbsp; чек-лист iPhone</div>
+  </div>
+
+  <div class="socials">
+    <div class="socials__label">каналы Бао</div>
+    <div class="socials__list">
+
+      <a class="social-link social-link--main" href="https://t.me/baoyoutube" target="_blank" rel="noopener">
+        <div class="social-icon social-icon--tg">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
+        </div>
+        <div class="social-text">
+          <span class="social-text__title">БАО <span class="star">★</span></span>
+          <span class="social-text__sub">Основной канал</span>
+        </div>
+        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+      <a class="social-link" href="https://t.me/BAOgigastore" target="_blank" rel="noopener">
+        <div class="social-icon social-icon--tg">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
+        </div>
+        <div class="social-text">
+          <span class="social-text__title">БАО | GIGASTORE</span>
+          <span class="social-text__sub">Продажа и скупка техники</span>
+        </div>
+        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+      <a class="social-link" href="https://t.me/baochatik" target="_blank" rel="noopener">
+        <div class="social-icon social-icon--tg">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
+        </div>
+        <div class="social-text">
+          <span class="social-text__title">БАО ЧАТИК</span>
+          <span class="social-text__sub">Группа для общения</span>
+        </div>
+        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+      <a class="social-link" href="https://www.youtube.com/@BAO_09" target="_blank" rel="noopener">
+        <div class="social-icon social-icon--yt">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.3-1.9.5-3.8.5-5.8a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
+        </div>
+        <div class="social-text">
+          <span class="social-text__title">YouTube</span>
+          <span class="social-text__sub">@BAO_09</span>
+        </div>
+        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+    </div>
+
+    <div class="admin-line">
+      admin: <a href="https://t.me/bao_gigastore" target="_blank" rel="noopener">@bao_gigastore</a>
+      <span class="admin-line__note">владелец общается с вами через админа 😉</span>
+    </div>
+  </div>
+</footer>
+
+<div class="dialog-overlay" id="dialogOverlay">
+  <div class="dialog">
+    <h3>Сбросить прогресс?</h3>
+    <p>Все галочки будут сняты. Это действие нельзя отменить.</p>
+    <div class="dialog-buttons">
+      <button class="cancel" id="dialogCancel">Отмена</button>
+      <button class="confirm" id="dialogConfirm">Сбросить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CHECK_DATA = [
+    {
+      id: 'external',
+      title: 'Внешний осмотр',
+      items: [
+        'Корпус: царапины, сколы, вмятины, изгиб',
+        'Зазоры между экраном, корпусом, задней крышкой — равномерные, экран не отходит',
+        'Пыль или грязь под стеклом экрана и камер',
+        'Потрясти — нет посторонних звуков внутри',
+        'Нижние винты возле разъёма — не слизаны',
+        'Сим-лоток родной, не отличается по цвету',
+        'Сеточки динамиков целые',
+      ],
+    },
+    {
+      id: 'screen',
+      title: 'Экран',
+      items: [
+        'Белый фон — нет жёлтых пятен, розовых зон, неравномерной подсветки',
+        'Чёрный фон — нет засветов и битых пикселей',
+        'Провести пальцем по всей площади — сенсор работает везде',
+        'Нет царапин под защитным стеклом (снять при необходимости)',
+      ],
+    },
+    {
+      id: 'buttons',
+      title: 'Кнопки и механика',
+      items: [
+        'Включение, громкость +/−, переключатель беззвучного режима',
+        'Вибрация / Taptic Engine',
+        'Кнопки не болтаются, нажимаются без усилий',
+      ],
+    },
+    {
+      id: 'battery',
+      title: 'Аккумулятор и зарядка',
+      items: [
+        'Настройки → Аккумулятор → Состояние: <strong>% максимальной ёмкости</strong>',
+        'Количество циклов (через ПК или утилиту)',
+        'Зарядка по кабелю: % растёт, кабель держится плотно',
+        '<strong>MagSafe:</strong> магниты держат крепко, зарядка идёт (для iPhone 12+)',
+        'Беспроводная зарядка работает',
+      ],
+    },
+    {
+      id: 'cameras',
+      title: 'Камеры',
+      items: [
+        'Все линзы на всех режимах (0.5× / 1× / 2× / 3×) + фронталка — фото однотонной поверхности, нет пятен, полос, царапин',
+        '<strong>Пыль с обратной (внутренней) стороны</strong> стекла камер — смотреть под углом на свет',
+        'Автофокус работает на всех объективах',
+        'Вспышка / фонарик',
+        'Ночной режим, портретный режим',
+      ],
+    },
+    {
+      id: 'sound',
+      title: 'Звук и микрофоны',
+      items: [
+        '<strong>Продуть динамики и разъём</strong> — сетки чистые, не забиты пылью',
+        'Основной динамик — музыка на максимум, без хрипов',
+        'Слуховой динамик — тестовый звонок',
+        'Основной микрофон — запись в Диктофоне',
+        'Микрофоны камер — видео на фронталку и основную',
+      ],
+    },
+    {
+      id: 'connectivity',
+      title: 'Связь и датчики',
+      items: [
+        'Сим-карта определяется, тестовый звонок: слышно обе стороны + громкая связь',
+        'Мобильный интернет работает',
+        'Wi-Fi — подключение и загрузка',
+        'Bluetooth — видит устройства',
+        'GPS — открыть Карты, определяет точку',
+        'Face ID / Touch ID — сканирует без ошибок',
+        'Датчик приближения — экран гаснет у уха при звонке',
+        'Поворот экрана (гироскоп)',
+      ],
+    },
+    {
+      id: 'locks',
+      title: 'Блокировки Apple ID и MDM',
+      subtitle: 'для БУ — обязательно',
+      items: [
+        'Продавец выходит из Apple ID',
+        'Отключает «Найти iPhone»',
+        'Активация с твоей сим-картой, не требует корпоративный профиль (MDM)',
+      ],
+    },
+    {
+      id: 'final',
+      title: 'Финал — сброс и оплата',
+      danger: true,
+      items: [
+        '<strong>При продавце:</strong> Настройки → Основные → Перенос или сброс → Стереть контент и настройки',
+        'Устройство перезагружается и просит активацию с нуля',
+        '<strong>Только теперь — передача денег</strong>',
+      ],
+    },
+  ];
+
+  const STORAGE_KEY = 'iphone-check-v1';
+  let state = {};
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = JSON.parse(raw);
+    } catch (e) { state = {}; }
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch (e) { /* ignore */ }
+  }
+
+  const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  function render() {
+    const root = document.getElementById('sections');
+    root.innerHTML = '';
+    let idx = 0;
+    let totalAll = 0;
+    let doneAll = 0;
+
+    CHECK_DATA.forEach((section, sIdx) => {
+      const num = String(sIdx + 1).padStart(2, '0');
+      const sectionEl = document.createElement('section');
+      sectionEl.className = 'section' + (section.danger ? ' section--danger' : '');
+
+      const done = section.items.filter((_, i) => state[`${section.id}-${i}`]).length;
+      const total = section.items.length;
+      totalAll += total; doneAll += done;
+
+      const head = document.createElement('div');
+      head.className = 'section__head';
+      head.innerHTML = `
+        <div class="section__title-group">
+          <span class="section__num">${num}</span>
+          <h2 class="section__title">${section.title}</h2>
+        </div>
+        <span class="section__count ${done === total ? 'done' : ''}">${done} / ${total}${section.subtitle ? ' · ' + section.subtitle : ''}</span>
+      `;
+      sectionEl.appendChild(head);
+
+      const items = document.createElement('div');
+      items.className = 'items';
+
+      section.items.forEach((text, i) => {
+        const key = `${section.id}-${i}`;
+        const checked = !!state[key];
+        const item = document.createElement('div');
+        item.className = 'item' + (checked ? ' checked' : '');
+        item.setAttribute('role', 'checkbox');
+        item.setAttribute('aria-checked', checked ? 'true' : 'false');
+        item.setAttribute('tabindex', '0');
+        item.innerHTML = `
+          <div class="checkbox">${CHECK_SVG}</div>
+          <div class="item__text">${text}</div>
+        `;
+        item.addEventListener('click', () => {
+          state[key] = !state[key];
+          saveState();
+          render();
+        });
+        item.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            state[key] = !state[key];
+            saveState();
+            render();
+          }
+        });
+        items.appendChild(item);
+        idx++;
+      });
+
+      sectionEl.appendChild(items);
+      root.appendChild(sectionEl);
+    });
+
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    const pct = totalAll === 0 ? 0 : Math.round((doneAll / totalAll) * 100);
+    fill.style.width = pct + '%';
+    text.textContent = `${doneAll} / ${totalAll}`;
+
+    const completion = document.getElementById('completion');
+    if (doneAll === totalAll && totalAll > 0) completion.classList.add('visible');
+    else completion.classList.remove('visible');
+  }
+
+  // Reset dialog
+  const dialog = document.getElementById('dialogOverlay');
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    dialog.classList.add('visible');
+  });
+  document.getElementById('dialogCancel').addEventListener('click', () => {
+    dialog.classList.remove('visible');
+  });
+  document.getElementById('dialogConfirm').addEventListener('click', () => {
+    state = {};
+    saveState();
+    dialog.classList.remove('visible');
+    render();
+  });
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.classList.remove('visible');
+  });
+
+  loadState();
+  render();
+
+  // Register service worker for offline
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
