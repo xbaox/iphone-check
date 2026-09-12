@@ -8,820 +8,616 @@
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.webmanifest" />
-<meta name="theme-color" content="#0a0a0b" />
+<meta name="theme-color" content="#000000" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <meta name="apple-mobile-web-app-title" content="iPhone Check" />
 <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
 <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png" />
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-
 <style>
   :root {
-    --bg: #0a0a0b;
-    --surface: #141417;
-    --surface-2: #1c1c20;
-    --border: #27272a;
-    --border-strong: #3f3f46;
-    --text: #fafafa;
-    --text-muted: #a1a1aa;
-    --text-faint: #71717a;
-    --accent: #f59e0b;
-    --accent-soft: #f59e0b22;
-    --success: #10b981;
-    --success-soft: #10b98122;
-    --danger: #ef4444;
-    --danger-soft: #ef444422;
-    --info: #3b82f6;
-    --info-soft: #3b82f622;
+    --bg: #000000;
+    --group: #1c1c1e;
+    --group-hi: #2c2c2e;
+    --sep: rgba(84, 84, 88, 0.55);
+    --label: #ffffff;
+    --label-2: rgba(235, 235, 245, 0.6);
+    --label-3: rgba(235, 235, 245, 0.32);
 
-    /* brand */
-    --brand-yellow: #facc15;
+    --orange: #ff9f0a;
+    --green: #30d158;
+    --red: #ff453a;
+    --blue: #0a84ff;
+    --cyan: #64d2ff;
 
-    /* Crystal VPN */
-    --crystal: #38bdf8;
-    --crystal-deep: #0ea5e9;
-    --crystal-soft: #38bdf814;
-
-    --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
-    --font-body: 'Inter Tight', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-    --radius: 14px;
-    --radius-sm: 8px;
+    --r-group: 12px;
+    --r-btn: 10px;
+    --tap: 44px;
   }
 
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
   html, body { margin: 0; padding: 0; }
 
   body {
-    font-family: var(--font-body);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.41;
+    letter-spacing: -0.01em;
     background: var(--bg);
-    color: var(--text);
-    font-size: 16px;
-    line-height: 1.5;
+    color: var(--label);
     -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: transparent;
-    min-height: 100vh;
     min-height: 100dvh;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    background-image:
-      radial-gradient(ellipse 90% 40% at 50% 0%, rgba(245, 158, 11, 0.06), transparent 60%),
-      radial-gradient(ellipse 60% 30% at 10% 100%, rgba(59, 130, 246, 0.04), transparent 60%);
-    background-attachment: fixed;
   }
 
-  .sticky-header {
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+
+  /* ---------- Nav ---------- */
+  .nav {
     position: sticky;
     top: 0;
     z-index: 50;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    background: rgba(10, 10, 11, 0.75);
-    border-bottom: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid transparent;
+    transition: border-color 0.25s ease;
   }
-  .sticky-header__inner {
-    max-width: 720px;
+  .nav.is-scrolled { border-bottom-color: var(--sep); }
+  .nav__inner {
+    max-width: 640px;
     margin: 0 auto;
-    padding: 14px 20px 12px;
-  }
-  .header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 10px;
-  }
-  .header-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .header-title .dot {
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 12px var(--accent);
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-  .reset-btn {
-    background: transparent;
-    border: 1px solid var(--border-strong);
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 7px 11px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .reset-btn:hover, .reset-btn:active {
-    color: var(--danger);
-    border-color: var(--danger);
-    background: var(--danger-soft);
-  }
-
-  .progress-wrap {
+    padding: 0 12px;
+    height: 48px;
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  .progress-track {
-    flex: 1;
-    height: 4px;
-    background: var(--surface-2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), #fbbf24);
-    width: 0%;
-    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 8px var(--accent-soft);
-  }
-  .progress-text {
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 12px;
-    color: var(--accent);
-    min-width: 48px;
-    text-align: right;
-    letter-spacing: 0.02em;
-  }
-
-  main {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 28px 20px 80px;
-  }
-
-  .intro {
-    margin-bottom: 28px;
-  }
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .hero-title {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(32px, 8vw, 48px);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-    margin: 0 0 10px;
-  }
-  .hero-title em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--accent);
-  }
-  .hero-sub {
-    color: var(--text-muted);
-    font-size: 15px;
-    max-width: 52ch;
-  }
-
-  .callout {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 16px;
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-  }
-  .callout--warn {
-    border-color: rgba(245, 158, 11, 0.4);
-    background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
-  }
-  .callout--tools {
-    border-color: var(--border);
-  }
-  .callout__label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-  }
-  .callout--tools .callout__label { color: var(--info); }
-  .callout__label::before {
-    content: '';
-    width: 14px;
-    height: 1px;
-    background: currentColor;
-  }
-  .callout ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .callout li {
-    padding: 7px 0 7px 20px;
-    color: var(--text);
-    font-size: 15px;
-    position: relative;
-    border-bottom: 1px dashed var(--border);
-  }
-  .callout li:last-child { border-bottom: none; }
-  .callout li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--text-faint);
-    font-family: var(--font-mono);
-  }
-  .callout li strong {
-    color: var(--accent);
+  .nav__title {
+    font-size: 17px;
     font-weight: 600;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav.is-scrolled .nav__title { opacity: 1; transform: none; }
+  .nav__reset {
+    background: none;
+    border: 0;
+    padding: 8px 4px;
+    color: var(--blue);
+    font-size: 17px;
+    margin-left: auto;
+  }
+  .nav__reset:active { opacity: 0.4; }
+  .nav__bar { height: 2px; background: rgba(255, 255, 255, 0.08); }
+  .nav__bar-fill {
+    height: 100%;
+    width: 0;
+    background: var(--green);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  }
+  .nav__bar-fill.has-issues { background: var(--orange); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 22px 0 0; }
+  .hero h1 {
+    font-size: 34px;
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -0.028em;
+    margin: 0 0 6px;
+  }
+  .hero p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--label-2);
+    letter-spacing: -0.006em;
   }
 
-  .section {
-    margin-top: 28px;
-  }
-  .section__head {
+  /* ---------- Progress card ---------- */
+  .pcard {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 12px;
-    padding: 0 4px;
+    align-items: center;
+    gap: 15px;
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: var(--group);
+    border-radius: var(--r-group);
   }
-  .section__title-group {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    min-width: 0;
+  .ring { width: 52px; height: 52px; flex-shrink: 0; transform: rotate(-90deg); }
+  .ring__bg { stroke: rgba(255, 255, 255, 0.1); }
+  .ring__fg {
+    stroke: var(--green);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.45s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
   }
-  .section__num {
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 13px;
-    color: var(--text-faint);
-    letter-spacing: 0.05em;
-  }
-  .section__title {
-    font-family: var(--font-display);
-    font-weight: 700;
+  .ring__fg.has-issues { stroke: var(--orange); }
+  .pcard__num {
     font-size: 22px;
+    font-weight: 600;
     letter-spacing: -0.02em;
-    margin: 0;
-    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
   }
-  .section__count {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-faint);
+  .pcard__sub { font-size: 14px; color: var(--label-2); letter-spacing: -0.006em; }
+  .pcard__issues { color: var(--orange); }
+
+  /* ---------- Group ---------- */
+  .glabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--label-2);
+    letter-spacing: -0.004em;
+    margin: 26px 0 7px 16px;
+  }
+  .group {
+    background: var(--group);
+    border-radius: var(--r-group);
+    overflow: hidden;
+  }
+
+  /* ---------- Section header ---------- */
+  .shead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 14px;
+    background: none;
+    border: 0;
+    text-align: left;
+  }
+  .shead:active { background: var(--group-hi); }
+  .tile {
+    width: 30px; height: 30px;
+    flex-shrink: 0;
+    border-radius: 7px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+  }
+  .tile svg { width: 18px; height: 18px; }
+  .shead__body { flex: 1; min-width: 0; display: block; }
+  .shead__title {
+    display: block;
+    font-size: 17px;
+    font-weight: 590;
+    letter-spacing: -0.021em;
+  }
+  .shead__sub { display: block; font-size: 12.5px; color: var(--orange); letter-spacing: -0.004em; }
+  .shead__count {
+    font-size: 15px;
+    color: var(--label-2);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
     white-space: nowrap;
   }
-  .section__count.done {
-    color: var(--success);
+  .shead__count.is-done { color: var(--green); display: flex; align-items: center; }
+  .shead__count.is-done svg { width: 17px; height: 17px; }
+  .shead__count.has-issues { color: var(--orange); }
+  .shead__count .dot {
+    display: none;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    margin-right: 6px;
+    vertical-align: 1px;
   }
+  .shead__count.has-issues .dot { display: inline-block; }
+  .chev {
+    width: 13px; height: 13px;
+    flex-shrink: 0;
+    color: var(--label-3);
+    transition: transform 0.25s ease;
+  }
+  .section.is-collapsed .chev { transform: rotate(-90deg); }
+  #sections .section { margin-top: 14px; scroll-margin-top: 60px; }
+  #sections .section:first-child { margin-top: 26px; }
+  .section__items { border-top: 0.5px solid var(--sep); }
+  .section.is-collapsed .section__items { display: none; }
 
-  .items {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .section--danger .items {
-    border-color: rgba(239, 68, 68, 0.4);
-    background: linear-gradient(180deg, rgba(239, 68, 68, 0.06), rgba(239, 68, 68, 0.01));
-  }
-
-  .item {
+  /* ---------- Row ---------- */
+  .row {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
+    gap: 12px;
+    padding: 12px 8px 12px 14px;
+    min-height: var(--tap);
+    position: relative;
     transition: background 0.12s ease;
-    user-select: none;
-    -webkit-user-select: none;
-    min-height: 52px;
   }
-  .item:last-child { border-bottom: none; }
-  .item:active { background: var(--surface-2); }
-  @media (hover: hover) {
-    .item:hover { background: var(--surface-2); }
+  .row + .row::before {
+    content: '';
+    position: absolute;
+    left: 50px; right: 0; top: 0;
+    height: 0.5px;
+    background: var(--sep);
   }
+  .row:active { background: var(--group-hi); }
 
-  .checkbox {
+  .mark {
+    width: 24px; height: 24px;
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    border: 1.5px solid var(--border-strong);
-    border-radius: 6px;
+    margin-top: 1px;
+    border-radius: 50%;
+    border: 1.6px solid var(--label-3);
     background: transparent;
+    position: relative;
+    transition: background 0.16s ease, border-color 0.16s ease;
+  }
+  .mark svg {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 14px; height: 14px;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.55);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
+  .row.is-ok .mark { background: var(--green); border-color: var(--green); }
+  .row.is-ok .mark .i-check { opacity: 1; transform: none; }
+  .row.is-bad .mark { background: var(--red); border-color: var(--red); }
+  .row.is-bad .mark .i-bang { opacity: 1; transform: none; }
+
+  .row__text {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+    letter-spacing: -0.011em;
+    padding-top: 1px;
+    transition: color 0.16s ease;
+  }
+  .row__text strong { font-weight: 600; }
+  .row.is-ok .row__text { color: var(--label-2); }
+  .row.is-bad .row__text strong { color: var(--red); }
+
+  .flag {
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+    margin: -4px 0;
+    border: 0;
+    background: none;
+    border-radius: 50%;
     display: grid;
     place-items: center;
-    transition: all 0.15s ease;
-    margin-top: 1px;
+    color: var(--label-3);
+    transition: color 0.16s ease, background 0.16s ease;
   }
-  .checkbox svg {
-    width: 14px;
-    height: 14px;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .item.checked .checkbox {
-    background: var(--success);
-    border-color: var(--success);
-  }
-  .item.checked .checkbox svg {
-    opacity: 1;
-    transform: scale(1);
-  }
-  .section--danger .item.checked .checkbox {
-    background: var(--danger);
-    border-color: var(--danger);
-  }
+  .flag svg { width: 21px; height: 21px; }
+  .flag { opacity: 0.55; }
+  .row.is-bad .flag { opacity: 1; }
+  .flag:active { background: var(--group-hi); }
+  .row.is-bad .flag { color: var(--red); }
 
-  .item__text {
-    flex: 1;
-    font-size: 15px;
-    line-height: 1.45;
-    transition: color 0.2s ease, opacity 0.2s ease;
-  }
-  .item.checked .item__text {
-    color: var(--text-faint);
-    text-decoration: line-through;
-    text-decoration-color: var(--text-faint);
-    text-decoration-thickness: 1px;
-  }
-  .item__text strong {
-    color: var(--accent);
-    font-weight: 600;
-  }
-  .section--danger .item__text strong {
-    color: var(--danger);
-  }
+  .group--danger { box-shadow: inset 0 0 0 1px rgba(255, 69, 58, 0.35); }
+  .group--danger .row__text strong { color: var(--red); }
 
-  .completion {
-    margin-top: 36px;
-    padding: 28px 24px;
-    text-align: center;
-    border: 1px solid var(--success);
-    background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.01));
-    border-radius: var(--radius);
-    display: none;
+  /* ---------- Notes ---------- */
+  .note { position: relative; padding: 12px 14px 12px 0; display: flex; gap: 12px; align-items: flex-start; }
+  .note + .note::before {
+    content: '';
+    position: absolute;
+    left: 30px; right: 0; top: 0;
+    height: 0.5px;
+    background: var(--sep);
   }
-  .completion.visible { display: block; animation: slideIn 0.4s ease; }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .completion__title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 22px;
-    margin: 0 0 6px;
-    color: var(--success);
-  }
-  .completion__sub {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin: 0;
-  }
-
-  footer {
-    max-width: 720px;
-    margin: 56px auto 0;
-    padding: 28px 20px 28px;
-    text-align: center;
-  }
-  .brand {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 18px 24px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: linear-gradient(180deg, rgba(250, 204, 21, 0.04), transparent);
-  }
-  .brand__logo {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 26px;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    color: var(--brand-yellow);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .brand__smile {
-    width: 22px;
-    height: 22px;
+  .note__dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
     flex-shrink: 0;
+    margin: 8px 0 0 16px;
+    background: var(--label-3);
   }
-  .brand__sub {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-  }
-  .brand__sub b {
-    color: var(--text-muted);
-    font-weight: 700;
-  }
+  .note__text { font-size: 16px; letter-spacing: -0.011em; }
+  .note__text strong { font-weight: 600; }
+  .group--warn .note__dot { background: var(--orange); }
+  .group--warn .note__text strong { color: var(--orange); }
 
-  .socials {
-    max-width: 440px;
-    margin: 24px auto 0;
-  }
-  .socials__list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .social-link {
+  /* ---------- Switch row ---------- */
+  .srow {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    text-decoration: none;
-    color: var(--text);
-    transition: all 0.15s ease;
-    -webkit-tap-highlight-color: transparent;
+    padding: 10px 14px;
+    min-height: var(--tap);
   }
-  .social-link:active {
-    transform: scale(0.99);
-    background: var(--surface-2);
-  }
-  @media (hover: hover) {
-    .social-link:hover {
-      background: var(--surface-2);
-      border-color: var(--border-strong);
-    }
-  }
-  .social-link--main {
-    border-color: rgba(250, 204, 21, 0.35);
-    background: linear-gradient(90deg, rgba(250, 204, 21, 0.06), transparent 60%);
-  }
-  .social-icon {
-    width: 36px;
-    height: 36px;
+  .srow__body { flex: 1; min-width: 0; }
+  .srow__title { font-size: 16px; letter-spacing: -0.011em; }
+  .srow__sub { font-size: 12.5px; color: var(--label-2); }
+  .switch {
+    width: 51px; height: 31px;
     flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    border-radius: 10px;
-  }
-  .social-icon svg { width: 20px; height: 20px; }
-  .social-icon--tg { background: #229ED9; color: white; }
-  .social-icon--yt { background: #FF0033; color: white; }
-  .social-text {
-    flex: 1;
-    min-width: 0;
+    border: 0;
+    border-radius: 16px;
+    background: rgba(120, 120, 128, 0.32);
+    padding: 2px;
     display: flex;
-    flex-direction: column;
-    gap: 1px;
-    text-align: left;
+    transition: background 0.2s ease;
   }
-  .social-text__title {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.005em;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  .switch span {
+    width: 27px; height: 27px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .social-text__title .star {
-    font-size: 11px;
-    color: var(--brand-yellow);
-  }
-  .social-text__sub {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.3;
-  }
-  .social-link__arrow {
-    color: var(--text-faint);
-    flex-shrink: 0;
-    transition: transform 0.15s ease, color 0.15s ease;
-  }
-  .social-link:hover .social-link__arrow,
-  .social-link:active .social-link__arrow {
-    color: var(--text);
-    transform: translateX(2px);
-  }
+  .switch[aria-checked="true"] { background: var(--green); }
+  .switch[aria-checked="true"] span { transform: translateX(20px); }
 
-  /* Crystal VPN */
-  .vpn {
-    max-width: 440px;
-    margin: 32px auto 0;
-    padding: 18px;
-    text-align: left;
-    border: 1px solid rgba(56, 189, 248, 0.28);
-    border-radius: var(--radius);
-    background:
-      radial-gradient(ellipse 70% 100% at 0% 0%, var(--crystal-soft), transparent 70%),
-      var(--surface);
-  }
-  .vpn__head {
+  /* ---------- Summary ---------- */
+  .summary { display: none; margin-top: 26px; padding: 18px 16px; border-radius: var(--r-group); }
+  .summary.is-visible { display: block; }
+  .summary--ok { background: rgba(48, 209, 88, 0.12); box-shadow: inset 0 0 0 1px rgba(48, 209, 88, 0.3); }
+  .summary--bad { background: rgba(255, 69, 58, 0.1); box-shadow: inset 0 0 0 1px rgba(255, 69, 58, 0.3); }
+  .summary__title {
+    font-size: 20px;
+    font-weight: 640;
+    letter-spacing: -0.022em;
+    margin: 0 0 5px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
   }
-  .vpn__gem {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
+  .summary__title svg { width: 21px; height: 21px; flex-shrink: 0; }
+  .summary--ok .summary__title { color: var(--green); }
+  .summary--bad .summary__title { color: var(--red); }
+  .summary__sub { font-size: 15px; color: var(--label-2); margin: 0; letter-spacing: -0.006em; }
+  .summary__list { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+  .summary__list li { font-size: 15px; line-height: 1.42; letter-spacing: -0.006em; padding-left: 15px; position: relative; }
+  .summary__list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--red);
   }
-  .vpn__name {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 17px;
-    letter-spacing: -0.01em;
-    line-height: 1.15;
+  .summary__list b { font-weight: 600; color: var(--label-2); }
+  .summary__copy {
+    margin-top: 16px;
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--r-btn);
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 16px;
+    font-weight: 590;
+    letter-spacing: -0.011em;
   }
-  .vpn__geo {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.3;
-  }
-  .vpn__offers {
-    list-style: none;
-    margin: 14px 0 0;
-    padding: 0;
+  .summary__copy:active { background: rgba(255, 255, 255, 0.2); }
+  .summary__copy.is-copied { color: var(--green); }
+
+  /* ---------- Footer ---------- */
+  footer { padding: 8px 0 40px; }
+
+  .link {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    text-decoration: none;
+    color: var(--label);
   }
+  .link:active { background: var(--group-hi); }
+  .link__body { flex: 1; min-width: 0; }
+  .link__title { display: block; font-size: 16px; font-weight: 500; letter-spacing: -0.011em; }
+  .link__sub { display: block; font-size: 13px; color: var(--label-2); }
+  .link__chev { width: 13px; height: 13px; color: var(--label-3); flex-shrink: 0; }
+
+  /* ---------- Crystal VPN ---------- */
+  .vpn { margin-top: 26px; padding: 18px 16px; border-radius: var(--r-group); background: var(--group); }
+  .vpn__head { display: flex; align-items: center; gap: 12px; }
+  .vpn__gem { width: 32px; height: 32px; flex-shrink: 0; }
+  .vpn__name { font-size: 17px; font-weight: 640; letter-spacing: -0.021em; }
+  .vpn__geo { font-size: 13px; color: var(--label-2); letter-spacing: -0.004em; }
+  .vpn__offers { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .vpn__offers li {
     position: relative;
-    padding-left: 15px;
-    font-size: 13.5px;
-    line-height: 1.55;
-    color: var(--text-muted);
+    padding-left: 16px;
+    font-size: 15px;
+    line-height: 1.47;
+    letter-spacing: -0.006em;
+    color: var(--label-2);
   }
   .vpn__offers li::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0.58em;
-    width: 5px;
-    height: 5px;
+    left: 1px; top: 0.6em;
+    width: 5px; height: 5px;
     transform: rotate(45deg);
-    background: var(--crystal);
+    background: var(--cyan);
   }
-  .vpn__offers b {
-    color: var(--text);
-    font-weight: 600;
-  }
+  .vpn__offers b { color: var(--label); font-weight: 600; }
   .promo {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 1px 7px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--crystal);
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px dashed rgba(56, 189, 248, 0.45);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
+    gap: 5px;
+    padding: 1px 8px;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(100, 210, 255, 0.16);
+    color: var(--cyan);
+    font-size: 13.5px;
+    font-weight: 640;
+    letter-spacing: 0.01em;
     transition: background 0.15s ease, color 0.15s ease;
-    -webkit-tap-highlight-color: transparent;
   }
-  .promo:active { background: rgba(56, 189, 248, 0.2); }
-  .promo.copied {
-    color: var(--success);
-    border-color: rgba(16, 185, 129, 0.5);
-    background: var(--success-soft);
-  }
-  .promo svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .promo:active { background: rgba(100, 210, 255, 0.3); }
+  .promo.is-copied { color: var(--green); background: rgba(48, 209, 88, 0.18); }
+  .promo svg { width: 11px; height: 11px; }
   .vpn__cta {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     margin-top: 16px;
-    padding: 11px 14px;
-    border-radius: var(--radius-sm);
-    background: var(--crystal-deep);
-    color: #04121c;
-    font-size: 14px;
-    font-weight: 700;
+    padding: 12px;
+    border-radius: var(--r-btn);
+    background: var(--blue);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 590;
+    letter-spacing: -0.011em;
     text-decoration: none;
-    transition: filter 0.15s ease, transform 0.15s ease;
   }
-  .vpn__cta:active { transform: scale(0.99); }
-  @media (hover: hover) {
-    .vpn__cta:hover { filter: brightness(1.1); }
-  }
+  .vpn__cta:active { filter: brightness(0.85); }
   .vpn__cta svg { width: 16px; height: 16px; }
-  .vpn__note {
-    margin: 10px 0 0;
-    text-align: center;
-    font-size: 11.5px;
-    color: var(--text-faint);
-  }
+  .vpn__note { margin: 9px 0 0; text-align: center; font-size: 12.5px; color: var(--label-3); }
 
-  /* Confirm dialog */
-  .dialog-overlay {
+  /* ---------- Alert ---------- */
+  .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 100;
-    padding: 20px;
-  }
-  .dialog-overlay.visible { display: flex; animation: fadeIn 0.18s ease; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .dialog {
-    background: var(--surface);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
     padding: 24px;
-    max-width: 340px;
+  }
+  .overlay.is-open { display: flex; animation: fade 0.16s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .alert {
     width: 100%;
+    max-width: 270px;
+    background: rgba(44, 44, 46, 0.94);
+    backdrop-filter: blur(30px);
+    border-radius: 14px;
+    overflow: hidden;
+    text-align: center;
+    animation: pop 0.2s cubic-bezier(0.3, 1.3, 0.6, 1);
   }
-  .dialog h3 {
-    font-family: var(--font-display);
-    margin: 0 0 8px;
-    font-size: 18px;
-  }
-  .dialog p {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin: 0 0 20px;
-  }
-  .dialog-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  .dialog-buttons button {
+  @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: none; opacity: 1; } }
+  .alert__body { padding: 19px 16px 15px; }
+  .alert h3 { font-size: 17px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .alert p { font-size: 13px; color: var(--label-2); margin: 0; }
+  .alert__actions { display: flex; border-top: 0.5px solid var(--sep); }
+  .alert__actions button {
     flex: 1;
-    padding: 11px 16px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-strong);
-    background: transparent;
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    padding: 12px 8px;
+    border: 0;
+    background: none;
+    font-size: 17px;
+    color: var(--blue);
   }
-  .dialog-buttons .confirm {
-    background: var(--danger);
-    border-color: var(--danger);
-    color: white;
+  .alert__actions button:active { background: rgba(255, 255, 255, 0.08); }
+  .alert__actions button + button { border-left: 0.5px solid var(--sep); }
+  .alert__actions .danger { color: var(--red); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
-  .dialog-buttons .confirm:hover { background: #dc2626; }
-  .dialog-buttons .cancel:hover { background: var(--surface-2); }
+  @media (hover: hover) {
+    .shead:hover, .row:hover, .link:hover { background: var(--group-hi); }
+    .nav__reset:hover { opacity: 0.7; }
+  }
 </style>
 </head>
 <body>
 
-<header class="sticky-header">
-  <div class="sticky-header__inner">
-    <div class="header-row">
-      <div class="header-title">
-        <span class="dot"></span>
-        iPhone · Чек-лист
-      </div>
-      <button class="reset-btn" id="resetBtn" aria-label="Сбросить прогресс">Сброс</button>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="progress-text" id="progressText">0 / 0</div>
-    </div>
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <span class="nav__title" id="navTitle">Проверка iPhone</span>
+    <button class="nav__reset" id="resetBtn">Сброс</button>
   </div>
+  <div class="nav__bar"><div class="nav__bar-fill" id="barFill"></div></div>
 </header>
 
-<main>
-  <div class="intro">
-    <div class="eyebrow">Инспекция · перед покупкой</div>
-    <h1 class="hero-title">Проверка <em>iPhone</em></h1>
-    <p class="hero-sub">Проходи по списку сверху вниз. Прогресс сохраняется автоматически. Работает оффлайн.</p>
+<main class="wrap">
+
+  <div class="hero">
+    <h1 id="heroTitle">Проверка iPhone</h1>
+    <p>Проходи сверху вниз. Прогресс сохраняется сам, интернет не нужен.</p>
   </div>
 
-  <section class="callout callout--warn">
-    <div class="callout__label">Перед началом</div>
-    <ul>
-      <li><strong>На холодную голову, не торопиться.</strong> Главное — проверить ВСЁ. Если что-то не стыкуется, продавец юлит, торопит или не даёт что-то проверить — красный флаг, уходи</li>
-      <li>Проверка займёт <strong>20–40 минут</strong> — закладывай время</li>
-      <li>Встреча в освещённом месте с доступом к Wi-Fi</li>
-      <li><strong>Деньги передаёшь только после полного сброса устройства</strong> (последний пункт)</li>
-    </ul>
-  </section>
+  <div class="pcard">
+    <svg class="ring" viewBox="0 0 52 52" aria-hidden="true">
+      <circle class="ring__bg" cx="26" cy="26" r="22" fill="none" stroke-width="4.5"/>
+      <circle class="ring__fg" id="ringFg" cx="26" cy="26" r="22" fill="none" stroke-width="4.5"/>
+    </svg>
+    <div>
+      <div class="pcard__num"><span id="statDone">0</span> из <span id="statTotal">43</span></div>
+      <div class="pcard__sub" id="statSub">пунктов проверено</div>
+    </div>
+  </div>
 
-  <section class="callout callout--tools">
-    <div class="callout__label">Инструменты с собой</div>
-    <ul>
-      <li>Повербанк с MagSafe (проверка магнитов + зарядки)</li>
-      <li>Провод зарядки (Lightning / USB-C — под модель)</li>
-      <li>Своя сим-карта</li>
-      <li>Скрепка для сим-лотка</li>
-      <li>Салфетка / микрофибра</li>
-      <li>Белый и чёрный фон (можно обои на своём телефоне)</li>
-    </ul>
-  </section>
+  <div class="glabel">Перед началом</div>
+  <div class="group group--warn">
+    <div class="note"><span class="note__dot"></span><div class="note__text"><strong>На холодную голову, не торопиться.</strong> Если продавец юлит, торопит или не даёт что-то проверить — уходи</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Проверка займёт <strong>20–40 минут</strong> — закладывай время</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Встреча в освещённом месте с доступом к Wi-Fi</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text"><strong>Деньги — только после полного сброса устройства</strong></div></div>
+  </div>
 
-  <!-- Sections injected via JS -->
+  <div class="glabel">Инструменты с собой</div>
+  <div class="group">
+    <div class="note"><span class="note__dot"></span><div class="note__text">Повербанк с MagSafe</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Провод зарядки (Lightning / USB-C — под модель)</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Своя сим-карта</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Скрепка для сим-лотка</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Салфетка / микрофибра</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Белый и чёрный фон (можно обои на своём телефоне)</div></div>
+  </div>
+
+  <div class="group" id="wakeGroup" style="margin-top:26px" hidden>
+    <div class="srow">
+      <div class="srow__body">
+        <div class="srow__title">Не гасить экран</div>
+        <div class="srow__sub">пока идёт проверка</div>
+      </div>
+      <button class="switch" id="wakeToggle" role="switch" aria-checked="false" aria-label="Не гасить экран"><span></span></button>
+    </div>
+  </div>
+
   <div id="sections"></div>
 
-  <div class="completion" id="completion">
-    <h2 class="completion__title">✓ Всё проверено</h2>
-    <p class="completion__sub">Если на каждом шаге — норм, можно передавать деньги.</p>
-  </div>
+  <section class="summary" id="summary"></section>
 </main>
 
-<footer>
-  <div class="brand">
-    <div class="brand__logo">
-      <svg class="brand__smile" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="32" cy="32" r="30" fill="#facc15"/>
-        <ellipse cx="22" cy="26" rx="3" ry="5.5" fill="#1a1a1a"/>
-        <ellipse cx="42" cy="26" rx="3" ry="5.5" fill="#1a1a1a"/>
-      </svg>
-      <span>BAO</span>
-    </div>
-    <div class="brand__sub">чек-лист iPhone</div>
-  </div>
-
-  <div class="socials">
-    <div class="socials__list">
-
-      <a class="social-link social-link--main" href="https://t.me/baocreates" target="_blank" rel="noopener">
-        <div class="social-icon social-icon--tg">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
-        </div>
-        <div class="social-text">
-          <span class="social-text__title">BAO <span class="star">★</span></span>
-          <span class="social-text__sub">@baocreates — Telegram</span>
-        </div>
-        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-
-    </div>
+<footer class="wrap">
+  <div class="glabel">Автор</div>
+  <div class="group">
+    <a class="link" href="https://t.me/baocreates" target="_blank" rel="noopener">
+      <span class="tile" style="background:#0088cc">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
+      </span>
+      <span class="link__body">
+        <span class="link__title">Bao</span>
+        <span class="link__sub">@baocreates</span>
+      </span>
+      <svg class="link__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
   </div>
 
   <section class="vpn">
     <div class="vpn__head">
-      <svg class="vpn__gem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="vpn__gem" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <defs>
-          <linearGradient id="crystalGem" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#bae6fd"/>
-            <stop offset="0.55" stop-color="#38bdf8"/>
-            <stop offset="1" stop-color="#0369a1"/>
+          <linearGradient id="gem" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#bae6fd"/><stop offset="0.55" stop-color="#64d2ff"/><stop offset="1" stop-color="#0a84ff"/>
           </linearGradient>
         </defs>
-        <path d="M6.2 3h11.6l4.2 6.1L12 21.4 2 9.1 6.2 3Z" fill="url(#crystalGem)"/>
-        <path d="M6.2 3h11.6l4.2 6.1L12 21.4 2 9.1 6.2 3Z" stroke="#e0f2fe" stroke-opacity="0.6" stroke-width="0.9" stroke-linejoin="round"/>
-        <path d="M2 9.1h20M6.2 3l2.6 6.1L12 21.4l3.2-12.3L17.8 3" stroke="#f0f9ff" stroke-opacity="0.45" stroke-width="0.8" stroke-linejoin="round"/>
+        <path d="M6.2 3h11.6l4.2 6.1L12 21.4 2 9.1 6.2 3Z" fill="url(#gem)"/>
+        <path d="M2 9.1h20M6.2 3l2.6 6.1L12 21.4l3.2-12.3L17.8 3" stroke="#f0f9ff" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round"/>
       </svg>
       <div>
         <div class="vpn__name">Crystal VPN</div>
         <div class="vpn__geo">Германия, Россия и Польша в одном тарифе</div>
       </div>
     </div>
-
     <ul class="vpn__offers">
       <li><b>3 дня бесплатно</b> — попробовать до оплаты</li>
       <li><b>Ещё месяц бесплатно</b> по промокоду
@@ -832,7 +628,6 @@
       </li>
       <li>YouTube и Instagram на полной скорости, без замедлений</li>
     </ul>
-
     <a class="vpn__cta" href="https://t.me/Crysta1_VPNbot" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
       Подключить в боте
@@ -841,22 +636,46 @@
   </section>
 </footer>
 
-<div class="dialog-overlay" id="dialogOverlay">
-  <div class="dialog">
-    <h3>Сбросить прогресс?</h3>
-    <p>Все галочки будут сняты. Это действие нельзя отменить.</p>
-    <div class="dialog-buttons">
-      <button class="cancel" id="dialogCancel">Отмена</button>
-      <button class="confirm" id="dialogConfirm">Сбросить</button>
+<div class="overlay" id="overlay">
+  <div class="alert" role="alertdialog" aria-labelledby="alertTitle">
+    <div class="alert__body">
+      <h3 id="alertTitle">Сбросить прогресс?</h3>
+      <p>Все отметки будут сняты. Отменить нельзя.</p>
+    </div>
+    <div class="alert__actions">
+      <button id="alertCancel">Отмена</button>
+      <button class="danger" id="alertConfirm">Сбросить</button>
     </div>
   </div>
 </div>
 
 <script>
-  const CHECK_DATA = [
+(function () {
+  'use strict';
+
+  var ICONS = {
+    search: '<circle cx="10.6" cy="10.6" r="6.4"/><path d="M15.3 15.3 21 21"/>',
+    display: '<rect x="6" y="2.4" width="12" height="19.2" rx="3.2"/><path d="M10.2 5.4h3.6"/>',
+    buttons: '<rect x="6.5" y="2.4" width="11" height="19.2" rx="3.2"/><path d="M4.4 7.6v2.6M4.4 12v2.6M19.6 8.6v4"/>',
+    battery: '<rect x="2.2" y="7" width="16.6" height="10" rx="3.2"/><path d="M21.4 10.6v2.8"/><path d="M11.7 9.5 9.3 12.7h2.6l-.5 2.1 2.4-3.2h-2.6z"/>',
+    camera: '<path d="M3 9.2a2.6 2.6 0 0 1 2.6-2.6h1.3c.5 0 1-.3 1.3-.7l.7-1.2c.3-.5.8-.7 1.3-.7h3.6c.5 0 1 .2 1.3.7l.7 1.2c.3.4.8.7 1.3.7h1.3A2.6 2.6 0 0 1 21 9.2v7.2a2.6 2.6 0 0 1-2.6 2.6H5.6A2.6 2.6 0 0 1 3 16.4z"/><circle cx="12" cy="12.4" r="3.4"/>',
+    sound: '<path d="M4 9.4h3L11.4 5.5v13L7 14.6H4z"/><path d="M15.2 9.5a3.6 3.6 0 0 1 0 5M17.9 6.9a7.3 7.3 0 0 1 0 10.2"/>',
+    signal: '<path d="M2.8 9.3a13 13 0 0 1 18.4 0"/><path d="M6.3 12.8a8 8 0 0 1 11.4 0"/><path d="M9.8 16.3a3.2 3.2 0 0 1 4.4 0"/><circle cx="12" cy="19.6" r="1.1" fill="currentColor" stroke="none"/>',
+    lock: '<rect x="4.6" y="10" width="14.8" height="11.2" rx="3.4"/><path d="M8 10V7.3a4 4 0 0 1 8 0V10"/>',
+    money: '<rect x="2.4" y="5.8" width="19.2" height="12.4" rx="2.8"/><circle cx="12" cy="12" r="2.7"/><path d="M6 9v6M18 9v6"/>',
+    check: '<polyline points="20 6 9 17 4 12"/>',
+    bang: '<path d="M12 6.4v7.3"/><circle cx="12" cy="17.7" r="1.15" fill="currentColor" stroke="none"/>',
+    bangCircle: '<circle cx="12" cy="12" r="9.2"/><path d="M12 7.6v5.2"/><circle cx="12" cy="16.3" r="1.05" fill="currentColor" stroke="none"/>'
+  };
+
+  function svg(name, sw, cls) {
+    return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' +
+      (sw || 1.7) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+  }
+
+  var CHECK_DATA = [
     {
-      id: 'external',
-      title: 'Внешний осмотр',
+      id: 'external', title: 'Внешний осмотр', icon: 'search', color: '#8e8e93',
       items: [
         'Корпус: царапины, сколы, вмятины, изгиб',
         'Зазоры между экраном, корпусом, задней крышкой — равномерные, экран не отходит',
@@ -864,64 +683,58 @@
         'Потрясти — нет посторонних звуков внутри',
         'Нижние винты возле разъёма — не слизаны',
         'Сим-лоток родной, не отличается по цвету',
-        'Сеточки динамиков целые',
-      ],
+        'Сеточки динамиков целые'
+      ]
     },
     {
-      id: 'screen',
-      title: 'Экран',
+      id: 'screen', title: 'Экран', icon: 'display', color: '#0a84ff',
       items: [
         'Белый фон — нет жёлтых пятен, розовых зон, неравномерной подсветки',
         'Чёрный фон — нет засветов и битых пикселей',
         'Провести пальцем по всей площади — сенсор работает везде',
-        'Нет царапин под защитным стеклом (снять при необходимости)',
-      ],
+        'Нет царапин под защитным стеклом (снять при необходимости)'
+      ]
     },
     {
-      id: 'buttons',
-      title: 'Кнопки и механика',
+      id: 'buttons', title: 'Кнопки и механика', icon: 'buttons', color: '#bf5af2',
       items: [
         'Включение, громкость +/−, переключатель беззвучного режима',
         'Вибрация / Taptic Engine',
-        'Кнопки не болтаются, нажимаются без усилий',
-      ],
+        'Кнопки не болтаются, нажимаются без усилий'
+      ]
     },
     {
-      id: 'battery',
-      title: 'Аккумулятор и зарядка',
+      id: 'battery', title: 'Аккумулятор и зарядка', icon: 'battery', color: '#30d158',
       items: [
         'Настройки → Аккумулятор → Состояние: <strong>% максимальной ёмкости</strong>',
         'Количество циклов (через ПК или утилиту)',
         'Зарядка по кабелю: % растёт, кабель держится плотно',
         '<strong>MagSafe:</strong> магниты держат крепко, зарядка идёт (для iPhone 12+)',
-        'Беспроводная зарядка работает',
-      ],
+        'Беспроводная зарядка работает'
+      ]
     },
     {
-      id: 'cameras',
-      title: 'Камеры',
+      id: 'cameras', title: 'Камеры', icon: 'camera', color: '#5e5ce6',
       items: [
         'Все линзы на всех режимах (0.5× / 1× / 2× / 3×) + фронталка — фото однотонной поверхности, нет пятен, полос, царапин',
         '<strong>Пыль с обратной (внутренней) стороны</strong> стекла камер — смотреть под углом на свет',
         'Автофокус работает на всех объективах',
         'Вспышка / фонарик',
-        'Ночной режим, портретный режим',
-      ],
+        'Ночной режим, портретный режим'
+      ]
     },
     {
-      id: 'sound',
-      title: 'Звук и микрофоны',
+      id: 'sound', title: 'Звук и микрофоны', icon: 'sound', color: '#ff375f',
       items: [
         '<strong>Продуть динамики и разъём</strong> — сетки чистые, не забиты пылью',
         'Основной динамик — музыка на максимум, без хрипов',
         'Слуховой динамик — тестовый звонок',
         'Основной микрофон — запись в Диктофоне',
-        'Микрофоны камер — видео на фронталку и основную',
-      ],
+        'Микрофоны камер — видео на фронталку и основную'
+      ]
     },
     {
-      id: 'connectivity',
-      title: 'Связь и датчики',
+      id: 'connectivity', title: 'Связь и датчики', icon: 'signal', color: '#40cbe0',
       items: [
         'Сим-карта определяется, тестовый звонок: слышно обе стороны + громкая связь',
         'Мобильный интернет работает',
@@ -930,178 +743,376 @@
         'GPS — открыть Карты, определяет точку',
         'Face ID / Touch ID — сканирует без ошибок',
         'Датчик приближения — экран гаснет у уха при звонке',
-        'Поворот экрана (гироскоп)',
-      ],
+        'Поворот экрана (гироскоп)'
+      ]
     },
     {
-      id: 'locks',
-      title: 'Блокировки Apple ID и MDM',
-      subtitle: 'для БУ — обязательно',
+      id: 'locks', title: 'Блокировки Apple ID и MDM', subtitle: 'для БУ — обязательно',
+      icon: 'lock', color: '#ff9f0a',
       items: [
         'Продавец выходит из Apple ID',
         'Отключает «Найти iPhone»',
-        'Активация с твоей сим-картой, не требует корпоративный профиль (MDM)',
-      ],
+        'Активация с твоей сим-картой, не требует корпоративный профиль (MDM)'
+      ]
     },
     {
-      id: 'final',
-      title: 'Финал — сброс и оплата',
-      danger: true,
+      id: 'final', title: 'Финал — сброс и оплата', icon: 'money', color: '#ff453a', danger: true,
       items: [
         '<strong>При продавце:</strong> Настройки → Основные → Перенос или сброс → Стереть контент и настройки',
         'Устройство перезагружается и просит активацию с нуля',
-        '<strong>Только теперь — передача денег</strong>',
-      ],
-    },
+        '<strong>Только теперь — передача денег</strong>'
+      ]
+    }
   ];
 
-  const STORAGE_KEY = 'iphone-check-v1';
-  let state = {};
+  var STORAGE_KEY = 'iphone-check-v1';
+  var TOTAL = CHECK_DATA.reduce(function (n, s) { return n + s.items.length; }, 0);
 
-  function loadState() {
+  var state = {};          // key -> 'ok' | 'bad'
+  var rows = {};           // key -> { el, section, text }
+  var sections = {};       // id  -> { el, head, countEl }
+  var collapsed = {};
+
+  function load() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) state = JSON.parse(raw);
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var parsed = JSON.parse(raw);
+      Object.keys(parsed).forEach(function (k) {
+        var v = parsed[k];
+        if (v === true) state[k] = 'ok';
+        else if (v === 'ok' || v === 'bad') state[k] = v;
+      });
     } catch (e) { state = {}; }
   }
-  function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-    catch (e) { /* ignore */ }
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function buzz(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} } }
+  function plain(html) {
+    var d = document.createElement('div');
+    d.innerHTML = html;
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function plural(n, one, few, many) {
+    var a = n % 10, b = n % 100;
+    if (a === 1 && b !== 11) return one;
+    if (a >= 2 && a <= 4 && (b < 10 || b >= 20)) return few;
+    return many;
   }
 
-  const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  function build() {
+    var root = document.getElementById('sections');
 
-  function render() {
-    const root = document.getElementById('sections');
-    root.innerHTML = '';
-    let idx = 0;
-    let totalAll = 0;
-    let doneAll = 0;
+    CHECK_DATA.forEach(function (def) {
+      var wrap = document.createElement('section');
+      wrap.className = 'group section' + (def.danger ? ' group--danger' : '');
 
-    CHECK_DATA.forEach((section, sIdx) => {
-      const num = String(sIdx + 1).padStart(2, '0');
-      const sectionEl = document.createElement('section');
-      sectionEl.className = 'section' + (section.danger ? ' section--danger' : '');
+      var head = document.createElement('button');
+      head.className = 'shead';
+      head.type = 'button';
+      head.setAttribute('aria-expanded', 'true');
+      head.innerHTML =
+        '<span class="tile" style="background:' + def.color + '">' + svg(def.icon) + '</span>' +
+        '<span class="shead__body"><span class="shead__title">' + def.title + '</span>' +
+        (def.subtitle ? '<span class="shead__sub">' + def.subtitle + '</span>' : '') + '</span>' +
+        '<span class="shead__count"></span>' +
+        '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+      head.addEventListener('click', function () {
+        var open = !wrap.classList.contains('is-collapsed');
+        wrap.classList.toggle('is-collapsed', open);
+        head.setAttribute('aria-expanded', String(!open));
+        collapsed[def.id] = open;
+      });
+      wrap.appendChild(head);
 
-      const done = section.items.filter((_, i) => state[`${section.id}-${i}`]).length;
-      const total = section.items.length;
-      totalAll += total; doneAll += done;
+      var list = document.createElement('div');
+      list.className = 'section__items';
 
-      const head = document.createElement('div');
-      head.className = 'section__head';
-      head.innerHTML = `
-        <div class="section__title-group">
-          <span class="section__num">${num}</span>
-          <h2 class="section__title">${section.title}</h2>
-        </div>
-        <span class="section__count ${done === total ? 'done' : ''}">${done} / ${total}${section.subtitle ? ' · ' + section.subtitle : ''}</span>
-      `;
-      sectionEl.appendChild(head);
+      def.items.forEach(function (text, i) {
+        var key = def.id + '-' + i;
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.setAttribute('role', 'checkbox');
+        row.setAttribute('tabindex', '0');
+        row.innerHTML =
+          '<span class="mark">' + svg('check', 3, 'i-check') + svg('bang', 2.4, 'i-bang') + '</span>' +
+          '<span class="row__text">' + text + '</span>' +
+          '<button class="flag" type="button" aria-label="Отметить как проблему">' + svg('bangCircle', 1.8) + '</button>';
 
-      const items = document.createElement('div');
-      items.className = 'items';
-
-      section.items.forEach((text, i) => {
-        const key = `${section.id}-${i}`;
-        const checked = !!state[key];
-        const item = document.createElement('div');
-        item.className = 'item' + (checked ? ' checked' : '');
-        item.setAttribute('role', 'checkbox');
-        item.setAttribute('aria-checked', checked ? 'true' : 'false');
-        item.setAttribute('tabindex', '0');
-        item.innerHTML = `
-          <div class="checkbox">${CHECK_SVG}</div>
-          <div class="item__text">${text}</div>
-        `;
-        item.addEventListener('click', () => {
-          state[key] = !state[key];
-          saveState();
-          render();
+        row.addEventListener('click', function (e) {
+          if (e.target.closest('.flag')) return;
+          setMark(key, state[key] === 'ok' ? null : 'ok');
         });
-        item.addEventListener('keydown', (e) => {
+        row.addEventListener('keydown', function (e) {
           if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
-            state[key] = !state[key];
-            saveState();
-            render();
+            setMark(key, state[key] === 'ok' ? null : 'ok');
           }
         });
-        items.appendChild(item);
-        idx++;
+        row.querySelector('.flag').addEventListener('click', function (e) {
+          e.stopPropagation();
+          setMark(key, state[key] === 'bad' ? null : 'bad');
+        });
+
+        rows[key] = { el: row, section: def, text: plain(text) };
+        list.appendChild(row);
       });
 
-      sectionEl.appendChild(items);
-      root.appendChild(sectionEl);
+      wrap.appendChild(list);
+      sections[def.id] = { el: wrap, head: head, countEl: head.querySelector('.shead__count') };
+      root.appendChild(wrap);
     });
-
-    const fill = document.getElementById('progressFill');
-    const text = document.getElementById('progressText');
-    const pct = totalAll === 0 ? 0 : Math.round((doneAll / totalAll) * 100);
-    fill.style.width = pct + '%';
-    text.textContent = `${doneAll} / ${totalAll}`;
-
-    const completion = document.getElementById('completion');
-    if (doneAll === totalAll && totalAll > 0) completion.classList.add('visible');
-    else completion.classList.remove('visible');
   }
 
-  // Reset dialog
-  const dialog = document.getElementById('dialogOverlay');
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    dialog.classList.add('visible');
-  });
-  document.getElementById('dialogCancel').addEventListener('click', () => {
-    dialog.classList.remove('visible');
-  });
-  document.getElementById('dialogConfirm').addEventListener('click', () => {
-    state = {};
-    saveState();
-    dialog.classList.remove('visible');
-    render();
-  });
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.classList.remove('visible');
-  });
+  function paintRow(key) {
+    var r = rows[key], v = state[key];
+    if (!r) return;
+    r.el.classList.toggle('is-ok', v === 'ok');
+    r.el.classList.toggle('is-bad', v === 'bad');
+    r.el.setAttribute('aria-checked', v === 'ok' ? 'true' : 'false');
+  }
 
-  loadState();
-  render();
+  function setMark(key, value) {
+    if (value === null) delete state[key];
+    else state[key] = value;
+    save();
+    buzz(value === 'bad' ? [12, 40, 12] : 10);
+    paintRow(key);
+    refresh();
+  }
 
-  // Promo code copy
-  const promoBtn = document.getElementById('promoCode');
-  const promoText = document.getElementById('promoText');
-  let promoTimer = null;
-  promoBtn.addEventListener('click', async () => {
-    const code = promoBtn.dataset.code;
-    let ok = false;
-    try {
-      await navigator.clipboard.writeText(code);
-      ok = true;
-    } catch (e) {
-      const ta = document.createElement('textarea');
-      ta.value = code;
+  function refresh(initial) {
+    var done = 0, bad = 0;
+
+    CHECK_DATA.forEach(function (def) {
+      var d = 0, b = 0;
+      def.items.forEach(function (_, i) {
+        var v = state[def.id + '-' + i];
+        if (v) d++;
+        if (v === 'bad') b++;
+      });
+      done += d; bad += b;
+
+      var s = sections[def.id];
+      var complete = d === def.items.length;
+      s.countEl.innerHTML = (complete && b === 0)
+        ? svg('check', 2.6)
+        : '<span class="dot"></span>' + d + ' / ' + def.items.length;
+      s.countEl.className = 'shead__count' + (b > 0 ? ' has-issues' : (complete ? ' is-done' : ''));
+
+      if (complete && b === 0 && collapsed[def.id] !== true && collapsed[def.id] !== false) {
+        collapsed[def.id] = true;
+      }
+      if (complete && b === 0 && collapsed[def.id] === true) {
+        s.el.classList.add('is-collapsed');
+        s.head.setAttribute('aria-expanded', 'false');
+      }
+      if (initial && collapsed[def.id]) s.el.classList.add('is-collapsed');
+    });
+
+    var pct = TOTAL ? done / TOTAL : 0;
+    var C = 2 * Math.PI * 22;
+    var ring = document.getElementById('ringFg');
+    ring.setAttribute('stroke-dasharray', C);
+    ring.setAttribute('stroke-dashoffset', C * (1 - pct));
+    ring.classList.toggle('has-issues', bad > 0);
+
+    var bar = document.getElementById('barFill');
+    bar.style.width = (pct * 100) + '%';
+    bar.classList.toggle('has-issues', bad > 0);
+
+    document.getElementById('statDone').textContent = done;
+    document.getElementById('statTotal').textContent = TOTAL;
+    document.getElementById('statSub').innerHTML = bad > 0
+      ? 'пунктов проверено · <span class="pcard__issues">' + bad + ' ' + plural(bad, 'проблема', 'проблемы', 'проблем') + '</span>'
+      : 'пунктов проверено';
+
+    renderSummary(done);
+  }
+
+  function problems() {
+    var out = [];
+    CHECK_DATA.forEach(function (def) {
+      def.items.forEach(function (_, i) {
+        var key = def.id + '-' + i;
+        if (state[key] === 'bad') out.push({ section: def.title, text: rows[key].text });
+      });
+    });
+    return out;
+  }
+
+  function renderSummary(done) {
+    var box = document.getElementById('summary');
+    var list = problems();
+    var allDone = done === TOTAL;
+
+    if (!list.length && !allDone) { box.className = 'summary'; box.innerHTML = ''; return; }
+
+    if (!list.length) {
+      box.className = 'summary is-visible summary--ok';
+      box.innerHTML =
+        '<h3 class="summary__title">' + svg('check', 2.6) + 'Всё чисто</h3>' +
+        '<p class="summary__sub">' + TOTAL + ' из ' + TOTAL + ' пунктов пройдены, проблем не отмечено. Можно передавать деньги.</p>';
+      return;
+    }
+
+    box.className = 'summary is-visible summary--bad';
+    box.innerHTML =
+      '<h3 class="summary__title">' + svg('bangCircle', 2.1) + list.length + ' ' +
+        plural(list.length, 'проблема', 'проблемы', 'проблем') + '</h3>' +
+      '<p class="summary__sub">' + (allDone
+        ? 'Проверка пройдена полностью. Это повод сбить цену — или уйти.'
+        : 'Отмечено по ходу проверки. Список пригодится для торга.') + '</p>' +
+      '<ul class="summary__list">' +
+        list.map(function (p) { return '<li><b>' + p.section + '</b> — ' + p.text + '</li>'; }).join('') +
+      '</ul>' +
+      '<button class="summary__copy" id="copyReport" type="button">Скопировать отчёт</button>';
+
+    document.getElementById('copyReport').addEventListener('click', copyReport);
+  }
+
+  function reportText() {
+    var list = problems(), done = 0;
+    CHECK_DATA.forEach(function (s) {
+      s.items.forEach(function (_, i) { if (state[s.id + '-' + i]) done++; });
+    });
+    var t = 'Проверка iPhone — ' + new Date().toLocaleDateString('ru-RU') + '\n';
+    t += 'Проверено: ' + done + ' / ' + TOTAL + '\n\n';
+    t += 'Проблемы (' + list.length + '):\n';
+    list.forEach(function (p) { t += '• ' + p.section + ' — ' + p.text + '\n'; });
+    return t;
+  }
+
+  function copy(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, fallback);
+    }
+    return Promise.resolve(fallback());
+
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
       ta.style.position = 'fixed';
       ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
-      try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
       ta.remove();
+      return ok;
     }
-    if (!ok) return;
-    promoBtn.classList.add('copied');
-    promoText.textContent = 'Скопировано';
-    clearTimeout(promoTimer);
-    promoTimer = setTimeout(() => {
-      promoBtn.classList.remove('copied');
-      promoText.textContent = code;
-    }, 1600);
-  });
+  }
 
-  // Register service worker for offline
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+  function copyReport() {
+    var btn = document.getElementById('copyReport');
+    copy(reportText()).then(function (ok) {
+      if (!ok) return;
+      btn.classList.add('is-copied');
+      btn.textContent = 'Скопировано';
+      buzz(10);
+      setTimeout(function () {
+        btn.classList.remove('is-copied');
+        btn.textContent = 'Скопировать отчёт';
+      }, 1800);
     });
   }
+
+  /* nav title on scroll */
+  var nav = document.getElementById('nav');
+  var heroTitle = document.getElementById('heroTitle');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) {
+      nav.classList.toggle('is-scrolled', !e[0].isIntersecting);
+    }, { rootMargin: '-52px 0px 0px 0px', threshold: 0 }).observe(heroTitle);
+  }
+
+  /* wake lock */
+  var wakeLock = null;
+  var wakeToggle = document.getElementById('wakeToggle');
+  if ('wakeLock' in navigator) {
+    document.getElementById('wakeGroup').hidden = false;
+    wakeToggle.addEventListener('click', function () {
+      if (wakeToggle.getAttribute('aria-checked') === 'true') {
+        if (wakeLock) { try { wakeLock.release(); } catch (e) {} }
+        wakeLock = null;
+        wakeToggle.setAttribute('aria-checked', 'false');
+      } else {
+        navigator.wakeLock.request('screen').then(function (lock) {
+          wakeLock = lock;
+          wakeToggle.setAttribute('aria-checked', 'true');
+          lock.addEventListener('release', function () { wakeLock = null; });
+        }, function () {
+          wakeToggle.setAttribute('aria-checked', 'false');
+        });
+      }
+      buzz(10);
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible' && !wakeLock &&
+          wakeToggle.getAttribute('aria-checked') === 'true') {
+        navigator.wakeLock.request('screen').then(function (l) { wakeLock = l; }, function () {});
+      }
+    });
+  }
+
+  /* promo copy */
+  var promoBtn = document.getElementById('promoCode');
+  var promoText = document.getElementById('promoText');
+  var promoTimer = null;
+  promoBtn.addEventListener('click', function () {
+    var code = promoBtn.dataset.code;
+    copy(code).then(function (ok) {
+      if (!ok) return;
+      promoBtn.classList.add('is-copied');
+      promoText.textContent = 'Скопировано';
+      buzz(10);
+      clearTimeout(promoTimer);
+      promoTimer = setTimeout(function () {
+        promoBtn.classList.remove('is-copied');
+        promoText.textContent = code;
+      }, 1600);
+    });
+  });
+
+  /* reset */
+  var overlay = document.getElementById('overlay');
+  document.getElementById('resetBtn').addEventListener('click', function () { overlay.classList.add('is-open'); });
+  document.getElementById('alertCancel').addEventListener('click', function () { overlay.classList.remove('is-open'); });
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.classList.remove('is-open'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') overlay.classList.remove('is-open'); });
+  document.getElementById('alertConfirm').addEventListener('click', function () {
+    state = {};
+    save();
+    collapsed = {};
+    Object.keys(rows).forEach(paintRow);
+    Object.keys(sections).forEach(function (id) {
+      sections[id].el.classList.remove('is-collapsed');
+      sections[id].head.setAttribute('aria-expanded', 'true');
+    });
+    overlay.classList.remove('is-open');
+    refresh();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* go */
+  load();
+  save();          // normalise any legacy true/false values on disk
+  build();
+  Object.keys(rows).forEach(paintRow);
+  CHECK_DATA.forEach(function (def) {
+    var all = def.items.every(function (_, i) { return state[def.id + '-' + i]; });
+    var clean = def.items.every(function (_, i) { return state[def.id + '-' + i] !== 'bad'; });
+    if (all && clean) collapsed[def.id] = true;
+  });
+  refresh(true);
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    });
+  }
+})();
 </script>
 </body>
 </html>
