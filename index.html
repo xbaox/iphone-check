@@ -41,9 +41,13 @@
     --info: #3b82f6;
     --info-soft: #3b82f622;
 
-    /* GIGASTORE brand */
+    /* brand */
     --brand-yellow: #facc15;
-    --brand-purple: #8b5cf6;
+
+    /* Crystal VPN */
+    --crystal: #38bdf8;
+    --crystal-deep: #0ea5e9;
+    --crystal-soft: #38bdf814;
 
     --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
     --font-body: 'Inter Tight', system-ui, sans-serif;
@@ -426,7 +430,7 @@
     padding: 18px 24px;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    background: linear-gradient(180deg, rgba(250, 204, 21, 0.03), rgba(139, 92, 246, 0.03));
+    background: linear-gradient(180deg, rgba(250, 204, 21, 0.04), transparent);
   }
   .brand__logo {
     font-family: var(--font-display);
@@ -434,12 +438,11 @@
     font-size: 26px;
     letter-spacing: -0.02em;
     line-height: 1;
+    color: var(--brand-yellow);
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .brand__logo .giga { color: var(--brand-yellow); }
-  .brand__logo .store { color: var(--brand-purple); }
   .brand__smile {
     width: 22px;
     height: 22px;
@@ -461,16 +464,6 @@
   .socials {
     max-width: 440px;
     margin: 24px auto 0;
-  }
-  .socials__label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-    text-align: center;
-    margin-bottom: 12px;
   }
   .socials__list {
     display: flex;
@@ -551,28 +544,118 @@
     transform: translateX(2px);
   }
 
-  .admin-line {
-    margin: 18px auto 0;
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-faint);
-    letter-spacing: 0.05em;
+  /* Crystal VPN */
+  .vpn {
+    max-width: 440px;
+    margin: 32px auto 0;
+    padding: 18px;
+    text-align: left;
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    border-radius: var(--radius);
+    background:
+      radial-gradient(ellipse 70% 100% at 0% 0%, var(--crystal-soft), transparent 70%),
+      var(--surface);
   }
-  .admin-line a {
-    color: var(--brand-yellow);
-    text-decoration: none;
+  .vpn__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .vpn__gem {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+  .vpn__name {
+    font-family: var(--font-display);
     font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
   }
-  .admin-line a:hover { text-decoration: underline; }
-  .admin-line__note {
-    display: block;
-    margin-top: 4px;
+  .vpn__geo {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+  .vpn__offers {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .vpn__offers li {
+    position: relative;
+    padding-left: 15px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .vpn__offers li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.58em;
+    width: 5px;
+    height: 5px;
+    transform: rotate(45deg);
+    background: var(--crystal);
+  }
+  .vpn__offers b {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .promo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 1px 7px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--crystal);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px dashed rgba(56, 189, 248, 0.45);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .promo:active { background: rgba(56, 189, 248, 0.2); }
+  .promo.copied {
+    color: var(--success);
+    border-color: rgba(16, 185, 129, 0.5);
+    background: var(--success-soft);
+  }
+  .promo svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .vpn__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--crystal-deep);
+    color: #04121c;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.15s ease, transform 0.15s ease;
+  }
+  .vpn__cta:active { transform: scale(0.99); }
+  @media (hover: hover) {
+    .vpn__cta:hover { filter: brightness(1.1); }
+  }
+  .vpn__cta svg { width: 16px; height: 16px; }
+  .vpn__note {
+    margin: 10px 0 0;
+    text-align: center;
+    font-size: 11.5px;
     color: var(--text-faint);
-    font-family: var(--font-body);
-    font-style: italic;
-    font-size: 11px;
-    letter-spacing: 0;
   }
 
   /* Confirm dialog */
@@ -697,66 +780,65 @@
         <ellipse cx="22" cy="26" rx="3" ry="5.5" fill="#1a1a1a"/>
         <ellipse cx="42" cy="26" rx="3" ry="5.5" fill="#1a1a1a"/>
       </svg>
-      <span><span class="giga">GIGA</span><span class="store">STORE</span></span>
+      <span>BAO</span>
     </div>
-    <div class="brand__sub">by <b>Bao</b> &nbsp;·&nbsp; чек-лист iPhone</div>
+    <div class="brand__sub">чек-лист iPhone</div>
   </div>
 
   <div class="socials">
-    <div class="socials__label">каналы Бао</div>
     <div class="socials__list">
 
-      <a class="social-link social-link--main" href="https://t.me/baoyoutube" target="_blank" rel="noopener">
+      <a class="social-link social-link--main" href="https://t.me/baocreates" target="_blank" rel="noopener">
         <div class="social-icon social-icon--tg">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
         </div>
         <div class="social-text">
-          <span class="social-text__title">БАО <span class="star">★</span></span>
-          <span class="social-text__sub">Основной канал</span>
+          <span class="social-text__title">BAO <span class="star">★</span></span>
+          <span class="social-text__sub">@baocreates — Telegram</span>
         </div>
         <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
-      <a class="social-link" href="https://t.me/BAOgigastore" target="_blank" rel="noopener">
-        <div class="social-icon social-icon--tg">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
-        </div>
-        <div class="social-text">
-          <span class="social-text__title">БАО | GIGASTORE</span>
-          <span class="social-text__sub">Продажа и скупка техники</span>
-        </div>
-        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-
-      <a class="social-link" href="https://t.me/baochatik" target="_blank" rel="noopener">
-        <div class="social-icon social-icon--tg">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
-        </div>
-        <div class="social-text">
-          <span class="social-text__title">БАО ЧАТИК</span>
-          <span class="social-text__sub">Группа для общения</span>
-        </div>
-        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-
-      <a class="social-link" href="https://www.youtube.com/@BAO_09" target="_blank" rel="noopener">
-        <div class="social-icon social-icon--yt">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.3-1.9.5-3.8.5-5.8a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
-        </div>
-        <div class="social-text">
-          <span class="social-text__title">YouTube</span>
-          <span class="social-text__sub">@BAO_09</span>
-        </div>
-        <svg class="social-link__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-
-    </div>
-
-    <div class="admin-line">
-      admin: <a href="https://t.me/bao_gigastore" target="_blank" rel="noopener">@bao_gigastore</a>
-      <span class="admin-line__note">владелец общается с вами через админа 😉</span>
     </div>
   </div>
+
+  <section class="vpn">
+    <div class="vpn__head">
+      <svg class="vpn__gem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="crystalGem" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#bae6fd"/>
+            <stop offset="0.55" stop-color="#38bdf8"/>
+            <stop offset="1" stop-color="#0369a1"/>
+          </linearGradient>
+        </defs>
+        <path d="M6.2 3h11.6l4.2 6.1L12 21.4 2 9.1 6.2 3Z" fill="url(#crystalGem)"/>
+        <path d="M6.2 3h11.6l4.2 6.1L12 21.4 2 9.1 6.2 3Z" stroke="#e0f2fe" stroke-opacity="0.6" stroke-width="0.9" stroke-linejoin="round"/>
+        <path d="M2 9.1h20M6.2 3l2.6 6.1L12 21.4l3.2-12.3L17.8 3" stroke="#f0f9ff" stroke-opacity="0.45" stroke-width="0.8" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="vpn__name">Crystal VPN</div>
+        <div class="vpn__geo">Германия, Россия и Польша в одном тарифе</div>
+      </div>
+    </div>
+
+    <ul class="vpn__offers">
+      <li><b>3 дня бесплатно</b> — попробовать до оплаты</li>
+      <li><b>Ещё месяц бесплатно</b> по промокоду
+        <button class="promo" id="promoCode" type="button" data-code="SEPTEMBER1" aria-label="Скопировать промокод SEPTEMBER1">
+          <span id="promoText">SEPTEMBER1</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+      </li>
+      <li>YouTube и Instagram на полной скорости, без замедлений</li>
+    </ul>
+
+    <a class="vpn__cta" href="https://t.me/Crysta1_VPNbot" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.2 3.3 2.6 10.5c-1.3.5-1.3 1.2-.2 1.5l4.7 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.4Zm-3.8 3.4-8.7 5.5-.3 3.7 2.4-2.2.3-.3.1-.1 5.9-6c.3-.3.6-.1.3.2Z"/></svg>
+      Подключить в боте
+    </a>
+    <p class="vpn__note">@Crysta1_VPNbot</p>
+  </section>
 </footer>
 
 <div class="dialog-overlay" id="dialogOverlay">
@@ -983,6 +1065,36 @@
 
   loadState();
   render();
+
+  // Promo code copy
+  const promoBtn = document.getElementById('promoCode');
+  const promoText = document.getElementById('promoText');
+  let promoTimer = null;
+  promoBtn.addEventListener('click', async () => {
+    const code = promoBtn.dataset.code;
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(code);
+      ok = true;
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+      ta.remove();
+    }
+    if (!ok) return;
+    promoBtn.classList.add('copied');
+    promoText.textContent = 'Скопировано';
+    clearTimeout(promoTimer);
+    promoTimer = setTimeout(() => {
+      promoBtn.classList.remove('copied');
+      promoText.textContent = code;
+    }, 1600);
+  });
 
   // Register service worker for offline
   if ('serviceWorker' in navigator) {

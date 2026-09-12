@@ -1,5 +1,5 @@
 // iPhone Check Service Worker
-const CACHE_NAME = 'iphone-check-v1';
+const CACHE_NAME = 'iphone-check-v2';
 const ASSETS = [
   './',
   './index.html',
