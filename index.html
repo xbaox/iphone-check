@@ -9,6 +9,7 @@
 <!-- PWA -->
 <link rel="manifest" href="./manifest.webmanifest" />
 <meta name="theme-color" content="#000000" />
+<meta name="color-scheme" content="dark" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -19,6 +20,8 @@
 
 <style>
   :root {
+    color-scheme: dark;
+
     --bg: #000000;
     --group: #1c1c1e;
     --group-hi: #2c2c2e;
@@ -39,7 +42,7 @@
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
   html, body { margin: 0; padding: 0; }
 
   body {
@@ -57,6 +60,16 @@
   .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
 
   button { font: inherit; color: inherit; cursor: pointer; }
+  .row, .shead, .flag, .link, button { touch-action: manipulation; }
+  /* невидимая тап-зона не меньше 44px у мелких кнопок */
+  .flag, .nav__reset, .promo, .switch { position: relative; z-index: 1; }
+  .flag::after, .nav__reset::after, .promo::after, .switch::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: max(100%, 44px); height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
   :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
 
   /* ---------- Nav ---------- */
@@ -65,16 +78,13 @@
     top: 0;
     z-index: 50;
     padding-top: env(safe-area-inset-top);
-    background: var(--bg);
-    border-bottom: 0.5px solid transparent;
-    transition: border-color 0.25s ease;
-  }
-  .nav.is-scrolled {
-    border-bottom-color: var(--sep);
     background: rgba(0, 0, 0, 0.72);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid transparent;
+    transition: border-color 0.25s ease;
   }
+  .nav.is-scrolled { border-bottom-color: var(--sep); }
   .nav__inner {
     max-width: 640px;
     margin: 0 auto;
@@ -112,8 +122,8 @@
     padding: 6px 12px 6px 10px;
     border: 0;
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.09);
-    color: var(--label-2);
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--label);
     font-size: 14px;
     font-weight: 510;
     letter-spacing: -0.006em;
@@ -538,7 +548,7 @@
   /* ---------- Update banner ---------- */
   .upd {
     position: fixed;
-    left: 16px; right: 16px;
+    left: calc(16px + env(safe-area-inset-left)); right: calc(16px + env(safe-area-inset-right));
     bottom: calc(16px + env(safe-area-inset-bottom));
     max-width: 608px;
     margin: 0 auto;
@@ -568,7 +578,7 @@
     letter-spacing: -0.011em;
   }
   .upd__btn:active { filter: brightness(0.85); }
-  body.has-upd { padding-bottom: 84px; }
+  body.has-upd { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
 
   /* ---------- Alert ---------- */
   .overlay {
@@ -580,7 +590,7 @@
     align-items: center;
     justify-content: center;
     z-index: 100;
-    padding: 24px;
+    padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
   }
   .overlay.is-open { display: flex; animation: fade 0.16s ease; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
@@ -756,7 +766,7 @@
 </div>
 
 <script>
-var APP_VERSION = '2026-09-13 16:31'; // менять при каждом деплое — см. CLAUDE.md
+var APP_VERSION = '2026-09-13 17:08'; // менять при каждом деплое — см. CLAUDE.md
 
 (function () {
   'use strict';
@@ -1244,11 +1254,6 @@ var APP_VERSION = '2026-09-13 16:31'; // менять при каждом деп
     }, { rootMargin: '-' + nav.offsetHeight + 'px 0px 0px 0px', threshold: 0 });
     navObserver.observe(heroTitle);
   }
-  if ('IntersectionObserver' in window) {
-    observeNav();
-    window.addEventListener('resize', observeNav);
-    window.addEventListener('orientationchange', observeNav);
-  }
 
   /* wake lock */
   var wakeLock = null;
@@ -1363,6 +1368,13 @@ var APP_VERSION = '2026-09-13 16:31'; // менять при каждом деп
     if (all && clean) collapsed[def.id] = true;
   });
   refresh(true);
+
+  // только после refresh: offsetHeight форсирует расчёт стилей, и кольцо с полоской иначе анимируются при загрузке
+  if ('IntersectionObserver' in window) {
+    observeNav();
+    window.addEventListener('resize', observeNav);
+    window.addEventListener('orientationchange', observeNav);
+  }
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
