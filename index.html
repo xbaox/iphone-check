@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#000000" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="iPhone Check" />
 <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
@@ -51,7 +51,7 @@
     color: var(--label);
     -webkit-font-smoothing: antialiased;
     min-height: 100dvh;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
@@ -64,13 +64,17 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    padding-top: env(safe-area-inset-top);
+    background: var(--bg);
     border-bottom: 0.5px solid transparent;
     transition: border-color 0.25s ease;
   }
-  .nav.is-scrolled { border-bottom-color: var(--sep); }
+  .nav.is-scrolled {
+    border-bottom-color: var(--sep);
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
   .nav__inner {
     max-width: 640px;
     margin: 0 auto;
@@ -244,7 +248,7 @@
     transition: transform 0.25s ease;
   }
   .section.is-collapsed .chev { transform: rotate(-90deg); }
-  #sections .section { margin-top: 14px; scroll-margin-top: 60px; }
+  #sections .section { margin-top: 14px; scroll-margin-top: calc(60px + env(safe-area-inset-top)); }
   #sections .section:first-child { margin-top: 26px; }
   .section__items { border-top: 0.5px solid var(--sep); }
   .section.is-collapsed .section__items { display: none; }
@@ -752,7 +756,7 @@
 </div>
 
 <script>
-var APP_VERSION = '2026-09-13 16:14'; // менять при каждом деплое — см. CLAUDE.md
+var APP_VERSION = '2026-09-13 16:31'; // менять при каждом деплое — см. CLAUDE.md
 
 (function () {
   'use strict';
@@ -1232,10 +1236,18 @@ var APP_VERSION = '2026-09-13 16:14'; // менять при каждом деп
   /* nav title on scroll */
   var nav = document.getElementById('nav');
   var heroTitle = document.getElementById('heroTitle');
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (e) {
+  var navObserver = null;
+  function observeNav() {
+    if (navObserver) navObserver.disconnect();
+    navObserver = new IntersectionObserver(function (e) {
       nav.classList.toggle('is-scrolled', !e[0].isIntersecting);
-    }, { rootMargin: '-52px 0px 0px 0px', threshold: 0 }).observe(heroTitle);
+    }, { rootMargin: '-' + nav.offsetHeight + 'px 0px 0px 0px', threshold: 0 });
+    navObserver.observe(heroTitle);
+  }
+  if ('IntersectionObserver' in window) {
+    observeNav();
+    window.addEventListener('resize', observeNav);
+    window.addEventListener('orientationchange', observeNav);
   }
 
   /* wake lock */
