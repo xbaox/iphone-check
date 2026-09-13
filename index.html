@@ -216,7 +216,8 @@
     font-weight: 590;
     letter-spacing: -0.021em;
   }
-  .shead__sub { display: block; font-size: 12.5px; color: var(--orange); letter-spacing: -0.004em; }
+  .shead__sub { display: block; font-size: 12.5px; color: var(--label-2); letter-spacing: -0.004em; }
+  .shead__sub--warn { color: var(--orange); }
   .shead__count {
     font-size: 15px;
     color: var(--label-2);
@@ -304,6 +305,15 @@
   .row__text strong { font-weight: 600; }
   .row.is-ok .row__text { color: var(--label-2); }
   .row.is-bad .row__text strong { color: var(--red); }
+  .row__hint {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    line-height: 1.38;
+    letter-spacing: -0.004em;
+    color: rgba(235, 235, 245, 0.45);
+  }
+  .row.is-ok .row__hint { color: rgba(235, 235, 245, 0.28); }
 
   .flag {
     width: 34px; height: 34px;
@@ -571,7 +581,7 @@
       <circle class="ring__fg" id="ringFg" cx="26" cy="26" r="22" fill="none" stroke-width="4.5"/>
     </svg>
     <div>
-      <div class="pcard__num"><span id="statDone">0</span> из <span id="statTotal">43</span></div>
+      <div class="pcard__num"><span id="statDone">0</span> из <span id="statTotal">48</span></div>
       <div class="pcard__sub" id="statSub">пунктов проверено</div>
     </div>
   </div>
@@ -584,14 +594,19 @@
     <div class="note"><span class="note__dot"></span><div class="note__text"><strong>Деньги — только после полного сброса устройства</strong></div></div>
   </div>
 
-  <div class="glabel">Инструменты с собой</div>
+  <div class="glabel">Инструменты — минимум</div>
   <div class="group">
-    <div class="note"><span class="note__dot"></span><div class="note__text">Повербанк с MagSafe</div></div>
-    <div class="note"><span class="note__dot"></span><div class="note__text">Провод зарядки (Lightning / USB-C — под модель)</div></div>
     <div class="note"><span class="note__dot"></span><div class="note__text">Своя сим-карта</div></div>
     <div class="note"><span class="note__dot"></span><div class="note__text">Скрепка для сим-лотка</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Провод зарядки (Lightning / USB-C — под модель)</div></div>
     <div class="note"><span class="note__dot"></span><div class="note__text">Салфетка / микрофибра</div></div>
-    <div class="note"><span class="note__dot"></span><div class="note__text">Белый и чёрный фон (можно обои на своём телефоне)</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Белый, чёрный и серый фон — обои на своём телефоне</div></div>
+  </div>
+
+  <div class="glabel">Для точной проверки</div>
+  <div class="group">
+    <div class="note"><span class="note__dot"></span><div class="note__text">Повербанк с MagSafe — проверить магниты и зарядку</div></div>
+    <div class="note"><span class="note__dot"></span><div class="note__text">Ноутбук с 3uTools (Windows) или coconutBattery (Mac) — циклы на iPhone до 14</div></div>
   </div>
 
   <div class="group" id="wakeGroup" style="margin-top:26px" hidden>
@@ -677,6 +692,7 @@
 
   var ICONS = {
     search: '<circle cx="10.6" cy="10.6" r="6.4"/><path d="M15.3 15.3 21 21"/>',
+    shield: '<path d="M12 2.8 4.5 5.6v5.2c0 4.6 3.1 8.6 7.5 9.9 4.4-1.3 7.5-5.3 7.5-9.9V5.6L12 2.8Z"/><path d="m9.2 12 2 2 3.8-4"/>',
     display: '<rect x="6" y="2.4" width="12" height="19.2" rx="3.2"/><path d="M10.2 5.4h3.6"/>',
     buttons: '<rect x="6.5" y="2.4" width="11" height="19.2" rx="3.2"/><path d="M4.4 7.6v2.6M4.4 12v2.6M19.6 8.6v4"/>',
     battery: '<rect x="2.2" y="7" width="16.6" height="10" rx="3.2"/><path d="M21.4 10.6v2.8"/><path d="M11.7 9.5 9.3 12.7h2.6l-.5 2.1 2.4-3.2h-2.6z"/>',
@@ -702,19 +718,57 @@
         'Корпус: царапины, сколы, вмятины, изгиб',
         'Зазоры между экраном, корпусом, задней крышкой — равномерные, экран не отходит',
         'Пыль или грязь под стеклом экрана и камер',
-        'Потрясти — нет посторонних звуков внутри',
+        {
+          text: 'Потрясти — нет посторонних звуков внутри',
+          hint: 'Лёгкий стук модуля камеры при тряске — норма, это стабилизатор'
+        },
         'Нижние винты возле разъёма — не слизаны',
-        'Сим-лоток родной, не отличается по цвету',
+        {
+          text: 'Сим-лоток родной, не отличается по цвету',
+          hint: 'На iPhone 6s–13 на лотке выбит IMEI — сверь с *#06#. Два слота бывают только у моделей для Китая, Гонконга и Макао (CH/ZP/ZA)'
+        },
         'Сеточки динамиков целые'
+      ]
+    },
+    {
+      id: 'authenticity', title: 'Подлинность', subtitle: 'Настройки → Основные → Об этом устройстве',
+      icon: 'shield', color: '#a2845e',
+      items: [
+        {
+          text: 'Номер модели начинается с <strong>M</strong> — новый',
+          hint: 'F — восстановленный Apple, N — замена по гарантии, P — с гравировкой. Кустарный ремонт букву не меняет — смотри следующий пункт'
+        },
+        {
+          text: '<strong>История обслуживания и деталей</strong> — раздела нет или все детали оригинальные',
+          hint: 'Раздел появляется, только если что-то меняли. «Неизвестная деталь» — неоригинал. Видит батарею с XR, экран с 11, камеры с 12'
+        },
+        'IMEI совпадает: *#06#, «Об этом устройстве», коробка',
+        {
+          text: 'Серийник на checkcoverage.apple.com — дата покупки и гарантия сходятся со словами продавца',
+          hint: 'Серийник копируется долгим нажатием в «Об этом устройстве»'
+        }
       ]
     },
     {
       id: 'screen', title: 'Экран', icon: 'display', color: '#0a84ff',
       items: [
-        'Белый фон — нет жёлтых пятен, розовых зон, неравномерной подсветки',
+        {
+          text: 'Белый фон — нет жёлтых пятен, розовых зон, неравномерной подсветки',
+          hint: 'Отключи True Tone и Night Shift, яркость на максимум'
+        },
         'Чёрный фон — нет засветов и битых пикселей',
-        'Провести пальцем по всей площади — сенсор работает везде',
-        'Нет царапин под защитным стеклом (снять при необходимости)'
+        {
+          text: 'Серый фон — нет выгорания OLED: теней от клавиатуры и статус-бара',
+          hint: 'OLED — это iPhone X, XS, 11 Pro, 12 и новее. У XR, 11 и SE экран LCD, он не выгорает'
+        },
+        {
+          text: 'Провести пальцем по всей площади — сенсор работает везде',
+          hint: 'Зажми любую иконку и тащи по всему экрану, особенно вдоль краёв — не должна отлипать'
+        },
+        {
+          text: 'Нет царапин под защитным стеклом (снять при необходимости)',
+          hint: 'Сначала протри микрофиброй, потом посвети фонариком под углом — на грязном стекле царапины не видно'
+        }
       ]
     },
     {
@@ -722,14 +776,23 @@
       items: [
         'Включение, громкость +/−, переключатель беззвучного режима',
         'Вибрация / Taptic Engine',
-        'Кнопки не болтаются, нажимаются без усилий'
+        {
+          text: 'Кнопки не болтаются, нажимаются без усилий',
+          hint: 'Жми по всей площади, включая края. Край проваливается без щелчка — кнопку вскрывали. Заметнее всего на кнопке питания'
+        }
       ]
     },
     {
       id: 'battery', title: 'Аккумулятор и зарядка', icon: 'battery', color: '#30d158',
       items: [
-        'Настройки → Аккумулятор → Состояние: <strong>% максимальной ёмкости</strong>',
-        'Количество циклов (через ПК или утилиту)',
+        {
+          text: 'Настройки → Аккумулятор → Состояние: <strong>% максимальной ёмкости</strong>',
+          hint: 'Ниже 80% — батарею скоро менять, это аргумент для торга'
+        },
+        {
+          text: 'Циклы: iPhone 15+ — там же, в «Состоянии аккумулятора». Старее — через ноутбук',
+          hint: 'У 15+ там же дата первого использования — сверь с тем, что говорит продавец. Для 14 и старше циклы покажут 3uTools (Windows) или coconutBattery (Mac)'
+        },
         'Зарядка по кабелю: % растёт, кабель держится плотно',
         '<strong>MagSafe:</strong> магниты держат крепко, зарядка идёт (для iPhone 12+)',
         'Беспроводная зарядка работает'
@@ -748,7 +811,7 @@
     {
       id: 'sound', title: 'Звук и микрофоны', icon: 'sound', color: '#ff375f',
       items: [
-        '<strong>Продуть динамики и разъём</strong> — сетки чистые, не забиты пылью',
+        '<strong>Подуть в динамики и разъём</strong> — сетки чистые, не забиты пылью',
         'Основной динамик — музыка на максимум, без хрипов',
         'Слуховой динамик — тестовый звонок',
         'Основной микрофон — запись в Диктофоне',
@@ -758,18 +821,21 @@
     {
       id: 'connectivity', title: 'Связь и датчики', icon: 'signal', color: '#40cbe0',
       items: [
-        'Сим-карта определяется, тестовый звонок: слышно обе стороны + громкая связь',
+        {
+          text: 'Сим-карта определяется, тестовый звонок: слышно обе стороны + громкая связь',
+          hint: 'Если слота два — проверь оба'
+        },
         'Мобильный интернет работает',
         'Wi-Fi — подключение и загрузка',
         'Bluetooth — видит устройства',
         'GPS — открыть Карты, определяет точку',
-        'Face ID / Touch ID — сканирует без ошибок',
+        'Face ID / Touch ID — сканирует без ошибок и разблокирует с экрана блокировки',
         'Датчик приближения — экран гаснет у уха при звонке',
         'Поворот экрана (гироскоп)'
       ]
     },
     {
-      id: 'locks', title: 'Блокировки Apple ID и MDM', subtitle: 'для БУ — обязательно',
+      id: 'locks', title: 'Блокировки Apple ID и MDM', subtitle: 'для БУ — обязательно', subtitleWarn: true,
       icon: 'lock', color: '#ff9f0a',
       items: [
         'Продавец выходит из Apple ID',
@@ -837,7 +903,7 @@
       head.innerHTML =
         '<span class="tile" style="background:' + def.color + '">' + svg(def.icon) + '</span>' +
         '<span class="shead__body"><span class="shead__title">' + def.title + '</span>' +
-        (def.subtitle ? '<span class="shead__sub">' + def.subtitle + '</span>' : '') + '</span>' +
+        (def.subtitle ? '<span class="shead__sub' + (def.subtitleWarn ? ' shead__sub--warn' : '') + '">' + def.subtitle + '</span>' : '') + '</span>' +
         '<span class="shead__count"></span>' +
         '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
       head.addEventListener('click', function () {
@@ -851,15 +917,17 @@
       var list = document.createElement('div');
       list.className = 'section__items';
 
-      def.items.forEach(function (text, i) {
+      def.items.forEach(function (item, i) {
         var key = def.id + '-' + i;
+        var text = typeof item === 'string' ? item : item.text;
+        var hint = typeof item === 'string' ? '' : item.hint;
         var row = document.createElement('div');
         row.className = 'row';
         row.setAttribute('role', 'checkbox');
         row.setAttribute('tabindex', '0');
         row.innerHTML =
           '<span class="mark">' + svg('check', 3, 'i-check') + svg('bang', 2.4, 'i-bang') + '</span>' +
-          '<span class="row__text">' + text + '</span>' +
+          '<span class="row__text">' + text + (hint ? '<span class="row__hint">' + hint + '</span>' : '') + '</span>' +
           '<button class="flag" type="button" aria-label="Отметить как проблему">' + svg('bangCircle', 1.8) + '</button>';
 
         row.addEventListener('click', function (e) {
@@ -989,9 +1057,10 @@
       '<ul class="summary__list">' +
         list.map(function (p) { return '<li><b>' + p.section + '</b> — ' + p.text + '</li>'; }).join('') +
       '</ul>' +
-      '<button class="summary__copy" id="copyReport" type="button">Скопировать отчёт</button>';
+      '<button class="summary__copy" id="copyReport" type="button">' +
+        (navigator.share ? 'Поделиться отчётом' : 'Скопировать отчёт') + '</button>';
 
-    document.getElementById('copyReport').addEventListener('click', copyReport);
+    document.getElementById('copyReport').addEventListener('click', navigator.share ? shareReport : copyReport);
   }
 
   function reportText() {
@@ -1038,6 +1107,12 @@
         btn.textContent = 'Скопировать отчёт';
       }, 1800);
     });
+  }
+
+  function shareReport() {
+    try {
+      navigator.share({ text: reportText() }).catch(function () {});
+    } catch (e) {}
   }
 
   /* nav title on scroll */
