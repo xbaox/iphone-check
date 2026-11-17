@@ -1,0 +1,1 @@
+function e(e){let t=e.trim();return/^https?:\/\//i.test(t)?t:`https://${t}`}function t(t){try{return new URL(e(t)).host.replace(/^www\./,``)}catch{return t}}export{e as n,t};

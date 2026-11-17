@@ -1,0 +1,1 @@
+.model-field{gap:8px;margin-bottom:12px;display:flex}.model-field .field{flex:1;min-width:0}.model-field input{text-transform:uppercase;font-variant-numeric:tabular-nums}.model-paste{border-radius:var(--radius-field);flex:none;width:auto;min-height:52px}.model-out{margin-bottom:0}.model-unknown{color:var(--text-2);margin:4px 4px 0;font-size:15px;line-height:20px}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="o" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFB14A"/><stop offset="1" stop-color="#F26A12"/></linearGradient>
+    <linearGradient id="w" x1="0" y1="176" x2="0" y2="816" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFE9D6"/></linearGradient>
+    <clipPath id="lens"><circle cx="560" cy="620" r="114"/></clipPath>
+  </defs>
+  <rect width="1024" height="1024" rx="229" fill="url(#o)"/>
+  <!-- phone and its camera block -->
+  <rect x="220" y="176" width="320" height="640" rx="76" fill="url(#w)"/>
+  <rect x="252" y="208" width="148" height="148" rx="44" fill="#FFD3AE"/>
+  <circle cx="294" cy="250" r="24" fill="#9A3D00"/>
+  <circle cx="294" cy="314" r="24" fill="#9A3D00"/>
+  <circle cx="358" cy="250" r="24" fill="#9A3D00"/>
+  <!-- magnifier: orange gap around the ring, the phone seen through the glass, ring, handle -->
+  <circle cx="560" cy="620" r="200" fill="url(#o)"/>
+  <rect x="220" y="176" width="320" height="640" rx="76" fill="#FFC48E" clip-path="url(#lens)"/>
+  <circle cx="560" cy="620" r="114" fill="#fff" fill-opacity=".26"/>
+  <circle cx="560" cy="620" r="146" fill="none" stroke="#fff" stroke-width="64"/>
+  <path d="M680 740L762 822" stroke="#fff" stroke-width="76" stroke-linecap="round"/>
+</svg>

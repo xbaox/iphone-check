@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Проверка iPhone</title>
+    <meta name="description" content="Чек-лист проверки iPhone и Android перед покупкой с рук. Без регистрации, работает без интернета." />
+    <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Проверка" />
+    <link rel="apple-touch-icon" href="/iphone-check/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/iphone-check/icon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="/iphone-check/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Проверка iPhone" />
+    <meta property="og:description" content="Чек-лист проверки iPhone и Android перед покупкой с рук. Без регистрации, работает без интернета." />
+    <meta property="og:image" content="https://xbaox.github.io/iphone-check/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Copies of 1.x look for this line to show «Обновить»: APP_VERSION in single quotes (CLAUDE.md). -->
+    <script>
+      var APP_VERSION = '2026-11-17 08:25';
+      (function () {
+        try {
+          var ui = JSON.parse(localStorage.getItem('iphonecheck.ui') || '{}');
+          if (ui.theme === 'light' || ui.theme === 'dark') document.documentElement.setAttribute('data-theme', ui.theme);
+          if (ui.lang === 'en') document.documentElement.lang = 'en';
+          document.documentElement.setAttribute('data-accent', typeof ui.accent === 'string' ? ui.accent : 'orange');
+        } catch (e) {
+          document.documentElement.setAttribute('data-accent', 'orange');
+        }
+        // iOS and iPadOS: the floating bottom counts from the screen's edge («Оборот», index.html).
+        if (/iP(hone|ad|od)/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1)) {
+          document.documentElement.setAttribute('data-ios', '');
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/iphone-check/assets/main-DQF0IYrH.js"></script>
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/rolldown-runtime-WkwZ5CU-.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/lists-BaJ6ctIC.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/jsx-runtime-CkXRJ162.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/motion-CL9EEmzC.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/toast-C3uzxUGY.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/preload-helper-DjAEoXmL.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/Icon-C-vVvt65.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/still-aZvZhyYo.js">
+    <link rel="modulepreload" crossorigin href="/iphone-check/assets/overlays-j6guhs28.js">
+    <link rel="stylesheet" crossorigin href="/iphone-check/assets/main-B111wNpV.css">
+  <link rel="manifest" href="/iphone-check/manifest.webmanifest"></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
